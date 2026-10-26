@@ -1,0 +1,1680 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>My Tunnel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: barra Ghella in alto, menu delle sezioni a sinistra (in alto su telefono), una sezione alla volta a destra */
+:root{
+  --bg:#F2F5F7; --surface:#FFFFFF; --surface-2:#F5F8FA; --ink:#14232E; --muted:#5A6873; --line:#D8E0E6;
+  --brand:#0060A6; --on-brand:#FFFFFF; --brand-2:#004B85;
+  --blue:#0060A6; --blue-soft:#E6EFF8; --green:#4A8A2C; --green-soft:#EAF4E3; --green-brand:#70AD47; --navy:#062A4D;
+  --red:#B03E2C; --red-soft:#FAE9E5; --amber:#8F6200; --amber-soft:#FBF1DC;
+  --font-display:"Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body:"IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --radius:10px; --brand-tx:#004B85;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0B151B; --surface:#122029; --surface-2:#172833; --ink:#E5EEF2; --muted:#9AABB5; --line:#253A46;
+  --brand:#0060A6; --on-brand:#FFFFFF; --brand-2:#004B85;
+  --blue:#7DB3E8; --blue-soft:#122E4D; --green:#93CC72; --green-soft:#1C3420; --green-brand:#7FBA55; --navy:#9CC8F0;
+  --red:#F0907B; --red-soft:#3B1F1A; --amber:#E2B45A; --amber-soft:#3A2C12; --brand-tx:#8EC1F0; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0B151B; --surface:#122029; --surface-2:#172833; --ink:#E5EEF2; --muted:#9AABB5; --line:#253A46;
+  --brand:#0060A6; --on-brand:#FFFFFF; --brand-2:#004B85;
+  --blue:#7DB3E8; --blue-soft:#122E4D; --green:#93CC72; --green-soft:#1C3420; --green-brand:#7FBA55; --navy:#9CC8F0;
+  --red:#F0907B; --red-soft:#3B1F1A; --amber:#E2B45A; --amber-soft:#3A2C12; --brand-tx:#8EC1F0; color-scheme:dark;}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.55;margin:0}
+h1,h2,h3,h4{font-family:var(--font-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(1.6rem,3.2vw,2.2rem);font-weight:800;line-height:1.1}
+h2{font-size:1.25rem;font-weight:700}
+h3{font-size:1.02rem;font-weight:700}
+p{margin:0}
+a{color:var(--blue)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.small{font-size:.85rem}
+.eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* Barra superiore */
+.topbar{background:var(--brand);color:var(--on-brand);position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+.topbar-in{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.wordmark{font-family:var(--font-display);font-weight:700;font-size:1.3rem;letter-spacing:.02em;display:flex;align-items:center;gap:10px}
+.glogo{height:30px;width:auto;display:block}
+.login-mark .glogo{height:40px}
+.logo-mark{height:26px;width:auto;display:block}
+.logo-mark.lg{height:34px}
+.wordmark i{display:inline-block;width:20px;height:24px;border-radius:3px;background:rgba(255,255,255,.85)}
+.topbar .portal{font-size:.86rem;opacity:.85;border-left:1px solid rgba(255,255,255,.3);padding-left:14px}
+.topbar .who{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:.86rem}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--brand-2);color:#FFFFFF;display:grid;place-items:center;font-weight:700;font-family:var(--font-display);font-size:.8rem}
+.demo-strip{background:var(--brand-2);color:var(--on-brand);font-size:.78rem;font-family:var(--font-mono)}
+.demo-strip div{max-width:1280px;margin:0 auto;padding:5px 20px}
+
+/* Struttura */
+.shell{max-width:1280px;margin:0 auto;padding-inline:20px;padding-block:24px 60px;display:grid;grid-template-columns:240px minmax(0,1fr);gap:28px;align-items:start}
+nav.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 92px);display:flex;flex-direction:column;gap:2px}
+nav.side .navlabel{margin:0 0 8px 12px}
+nav.side button{display:flex;align-items:center;gap:10px;text-align:left;border:0;background:none;padding:10px 12px;border-radius:8px;cursor:pointer;color:var(--muted);font-weight:500;font-size:.93rem}
+nav.side button svg{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8}
+nav.side button:hover{background:var(--surface);color:var(--ink)}
+nav.side button[aria-current="true"]{background:var(--surface);color:var(--brand-tx);box-shadow:inset 3px 0 0 var(--brand);font-weight:600}
+:root[data-theme="dark"] nav.side button[aria-current="true"]{color:var(--blue)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) nav.side button[aria-current="true"]{color:var(--blue)}}
+.side-foot{margin-top:18px;padding:14px 12px;border-top:1px solid var(--line);font-size:.82rem;color:var(--muted);display:flex;flex-direction:column;gap:6px}
+
+main{min-width:0}
+.sec-head{display:flex;flex-direction:column;gap:6px;margin-bottom:30px}
+.sec-head .lead{color:var(--muted);max-width:68ch}
+.sec-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+.sec-tag::before{content:"";width:18px;height:3px;background:var(--brand);border-radius:2px}
+
+.grid{display:grid;gap:28px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g-main{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;min-width:0}
+.card h2,.card h3{margin-bottom:12px}
+.stack{display:flex;flex-direction:column;gap:60px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* Numeri chiave */
+.kpi{display:flex;flex-direction:column;gap:4px}
+.kpi .v{font-family:var(--font-display);font-weight:800;font-size:2rem;line-height:1;font-variant-numeric:tabular-nums}
+.kpi .l{color:var(--muted);font-size:.85rem}
+
+/* Pill e badge */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-family:var(--font-mono);font-size:.76rem;border:1px solid var(--line);white-space:nowrap;background:var(--surface)}
+.pill.ok{color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,transparent);background:var(--green-soft)}
+.pill.bad{color:var(--red);border-color:color-mix(in srgb,var(--red) 45%,transparent);background:var(--red-soft)}
+.pill.eq{color:var(--muted)}
+.pill.blue{color:var(--blue);border-color:color-mix(in srgb,var(--blue) 40%,transparent);background:var(--blue-soft)}
+.pill.warn{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 45%,transparent);background:var(--amber-soft)}
+
+/* Profilo hero */
+.hero{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.hero-top{padding:24px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.hero-top .avatar{width:64px;height:64px;font-size:1.3rem}
+.hero-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.hero-meta>div{padding:16px 24px;border-right:1px solid var(--line);min-width:0}
+.hero-meta>div:last-child{border-right:0}
+.hero-meta .val{font-weight:600;margin-top:4px}
+
+.jump{display:flex;flex-direction:column;gap:6px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:var(--radius);padding:18px;cursor:pointer;min-width:0;transition:border-color .15s, transform .15s}
+.jump:hover{border-color:var(--blue);transform:translateY(-1px)}
+.jump .t{font-family:var(--font-display);font-weight:700;display:flex;align-items:center;gap:8px}
+.jump .t svg{width:18px;height:18px;stroke:var(--blue);fill:none;stroke-width:1.8}
+.jump .d{color:var(--muted);font-size:.86rem}
+.jump .go{margin-top:auto;color:var(--blue);font-size:.84rem;font-weight:600}
+
+/* Tabelle */
+.tbl-wrap{overflow-x:auto;margin-inline:-4px}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th{font-family:var(--font-mono);font-weight:500;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 10px;border-bottom:1px solid var(--line);vertical-align:bottom}
+td{padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.mono{white-space:nowrap}
+td.n,th.n{text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+td.c,th.c{text-align:center}
+tfoot td{font-weight:700;border-bottom:0}
+td .sub{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
+.neg{color:var(--red)} .pos{color:var(--green)} .zero{color:var(--muted)}
+
+/* Competenze */
+.comp{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden}
+.comp summary{list-style:none;cursor:pointer;padding:18px 20px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center}
+.comp summary::-webkit-details-marker{display:none}
+.comp summary .nm{font-weight:600;font-size:1rem}
+.comp summary .mother{color:var(--muted);font-size:.83rem}
+.comp .facts{display:grid;grid-template-columns:90px 140px 110px 50px 20px;column-gap:22px;align-items:center;justify-content:end}
+.fact{display:flex;flex-direction:column;align-items:stretch;text-align:right}
+.fact b{display:flex;justify-content:flex-end}
+.fact b{font-family:var(--font-mono);font-weight:500;font-size:1rem}
+.fact span{font-size:.68rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.08em;margin-right:-.08em;color:var(--muted)}
+.comp .body{padding:0 20px 20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;border-top:1px dashed var(--line);padding-top:16px}
+.comp .chev{transition:transform .2s;width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2}
+.comp[open] .chev{transform:rotate(180deg)}
+.dots{display:inline-flex;gap:4px}
+.dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--blue)}
+
+.scale{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.scale>div{border:1px solid var(--line);border-radius:8px;padding:12px;background:var(--surface-2)}
+.scale b{font-family:var(--font-display);font-size:1.4rem;color:var(--blue);display:block}
+.scale .nm{font-weight:600;font-size:.88rem}
+.scale p{font-size:.8rem;color:var(--muted);margin-top:4px}
+
+/* Barre criteri */
+.crit{display:grid;grid-template-columns:minmax(0,1fr) 64px;gap:4px 14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.crit:last-child{border-bottom:0}
+.crit .nm{font-weight:600}
+.crit .pct{font-family:var(--font-mono);text-align:right;font-size:1.05rem}
+.bar{grid-column:1 / -1;height:10px;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;overflow:hidden;position:relative}
+.bar i{display:block;height:100%;background:var(--blue);border-radius:999px}
+.bar i.g{background:var(--brand)}
+.crit .subs{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.8rem;color:var(--muted)}
+.crit .subs b{color:var(--ink);font-family:var(--font-mono);font-weight:500}
+
+/* Scala fasce */
+.ladder{display:flex;flex-direction:column;gap:6px}
+.rung{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface-2)}
+.rung .num{font-family:var(--font-display);font-weight:800;font-size:1.1rem;color:var(--muted);text-align:center}
+.rung .nm{font-weight:600;font-size:.92rem}
+.rung .rg{font-family:var(--font-mono);font-size:.78rem;color:var(--ink)}
+.rung.me{background:var(--blue-soft);border-color:var(--blue)}
+.rung.me .num{color:var(--blue)}
+.rungd{border:1px solid var(--line);border-radius:8px;background:var(--surface-2)}
+.rungd.me{background:var(--blue-soft);border-color:var(--blue)}
+.rungd.me .num{color:var(--blue)}
+.rungd summary.rung{list-style:none;cursor:pointer;border:0;background:transparent;grid-template-columns:34px minmax(0,1fr) auto 18px}
+.rungd summary.rung::-webkit-details-marker{display:none}
+.rungd .chev{color:var(--muted);font-size:1rem;text-align:center;transition:transform .2s}
+.rungd[open] .chev{transform:rotate(45deg)}
+.rung-sum{margin:0;padding:0 14px 12px 58px;font-size:.88rem;line-height:1.55;color:var(--ink)}
+.rung.next{border-style:dashed;border-color:var(--green)}
+.rung .area{font-size:.72rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+
+.big-score{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.big-score .v{font-family:var(--font-display);font-weight:800;font-size:3.4rem;line-height:.9;color:var(--brand-tx);font-variant-numeric:tabular-nums}
+:root[data-theme="dark"] .big-score .v{color:var(--blue)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .big-score .v{color:var(--blue)}}
+
+.track{position:relative;height:46px;margin-top:18px}
+.track .seg{position:absolute;top:14px;height:12px;border-right:2px solid var(--surface)}
+.track .mk{position:absolute;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center}
+.track .mk.l{transform:translateX(calc(-100% + 1px));align-items:flex-end}
+.track .mk.r{transform:translateX(-1px);align-items:flex-start}
+.track .mk b{font-family:var(--font-mono);font-size:.7rem;background:var(--ink);color:var(--bg);padding:1px 6px;border-radius:4px}
+.track .mk i{width:2px;height:30px;background:var(--ink)}
+.track-axis{position:relative;height:16px;font-family:var(--font-mono);font-size:.68rem;color:var(--muted)}
+.track-axis span{position:absolute;transform:translateX(-50%)}
+
+.steps{counter-reset:s;display:flex;flex-direction:column;gap:12px}
+.steps li{list-style:none;display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px}
+.steps li::before{counter-increment:s;content:counter(s);width:26px;height:26px;border-radius:50%;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-family:var(--font-mono);font-size:.8rem}
+.steps{padding:0;margin:0}
+
+/* Valutazione */
+.tabs{display:inline-flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px;margin-bottom:20px;flex-wrap:wrap}
+.tabs button{border:0;background:none;padding:8px 16px;border-radius:7px;cursor:pointer;font-weight:500;color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--brand-2);color:var(--on-brand)}
+.evalhead{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 20px}
+.evalhead .val{font-weight:600}
+.radar-wrap svg{width:100%;height:auto;display:block;max-width:660px;margin:0 auto}
+.radar-sm svg{max-width:680px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:.86rem;color:var(--muted);justify-content:center;margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.lg-dash{width:24px;border-top:2px dashed var(--muted)}
+.lg-area{width:22px;height:12px;background:color-mix(in srgb,var(--blue) 22%,transparent);border:2px solid var(--blue);border-radius:2px}
+.lg-green{width:24px;border-top:2px dashed var(--navy)}
+.read-item{display:block;padding:12px 0;border-bottom:1px solid var(--line)}
+.read-item:last-child{border-bottom:0}
+.read-item .pill{justify-content:center;align-self:start}
+.howto{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:6px}
+.howto>div{background:var(--surface-2);border-radius:8px;padding:12px;font-size:.84rem;display:flex;flex-direction:column;gap:6px}
+.howto svg{width:40px;height:16px}
+.gapcell{display:inline-grid;place-items:center;min-width:30px;height:26px;border-radius:6px;background:transparent;font-family:var(--font-mono);font-size:.85rem;padding:0 6px}
+.gapcell.bad{background:var(--amber-soft);color:var(--amber);font-weight:600}
+.gapcell.plus{background:var(--green-soft);color:var(--green)}
+.quote{border-left:3px solid var(--brand);padding:4px 0 4px 16px;color:var(--ink)}
+.quote .by{display:block;margin-top:8px;color:var(--muted);font-size:.83rem}
+
+/* Obiettivi */
+.goal{display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);align-items:center}
+.goal:last-child{border-bottom:0}
+.goal .t{font-weight:600}
+.goal .meta{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:.82rem;color:var(--muted);margin-top:4px}
+.goal .meta b{font-family:var(--font-mono);font-weight:500;color:var(--ink)}
+.meter{height:8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden;margin-top:6px}
+.meter i{display:block;height:100%;background:var(--green-brand)}
+.meter i.part{background:var(--amber)}
+.goal .res{text-align:right}
+.timeline{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;position:relative}
+.timeline>div{padding:14px 14px 0 0;border-top:3px solid var(--line);position:relative;font-size:.86rem}
+.timeline>div.done{border-top-color:var(--brand)}
+.timeline>div::before{content:"";position:absolute;top:-8px;left:0;width:13px;height:13px;border-radius:50%;background:var(--surface);border:3px solid var(--line)}
+.timeline>div.done::before{border-color:var(--brand);background:var(--brand)}
+.timeline b{display:block;font-family:var(--font-display)}
+
+/* Formazione */
+.gapcard{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden}
+.gapcard .gh{padding:16px 20px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.gapcard.below .gh{background:var(--red-soft)}
+.gapcard .gh .nm{font-weight:700;font-family:var(--font-display)}
+.levels{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:.85rem}
+.course{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line)}
+.course:last-child{border-bottom:0}
+.course .t{font-weight:600}
+.course .m{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);margin-top:3px}
+.btn{border:1px solid var(--blue);color:var(--blue);background:var(--surface);border-radius:8px;padding:7px 14px;cursor:pointer;font-weight:600;font-size:.85rem;white-space:nowrap}
+@media (max-width:520px){.btn{white-space:normal;text-align:left}}
+.btn:hover{background:var(--blue-soft)}
+.btn.on{background:var(--green-soft);color:var(--green);border-color:var(--green)}
+.btn.solid{background:var(--brand-2);color:var(--on-brand);border-color:var(--brand-2)}
+.plan-empty{color:var(--muted);font-size:.88rem;padding:6px 0}
+.plan li span:last-child{white-space:nowrap}
+.plan li{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.88rem}
+.plan{list-style:none;margin:0;padding:0}
+.badge-ob{display:flex;gap:14px;align-items:center}
+.badge-ob .hex{width:54px;height:60px;flex:none;background:var(--brand);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);display:grid;place-items:center;color:#FFFFFF;font-family:var(--font-display);font-weight:800;font-size:.75rem}
+
+/* Carriera */
+.path{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.stepbtn{border:1px solid var(--line);background:var(--surface);border-radius:var(--radius);padding:14px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:4px;position:relative;min-width:0}
+.stepbtn .lvl{font-family:var(--font-mono);font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.stepbtn .nm{font-family:var(--font-display);font-weight:700}
+.stepbtn .sc{font-family:var(--font-mono);font-size:.8rem;color:var(--muted)}
+.stepbtn.cur{background:var(--blue-soft);border-color:var(--blue);cursor:default}
+.stepbtn[aria-pressed="true"]{border-color:var(--navy);box-shadow:0 0 0 2px color-mix(in srgb,var(--navy) 30%,transparent)}
+.stepbtn .tag{position:absolute;top:10px;right:10px}
+.delta-cells{display:flex;gap:6px;align-items:center;justify-content:flex-end;font-family:var(--font-mono)}
+.arrow{color:var(--muted)}
+.cmp-bars{display:flex;flex-direction:column;gap:14px}
+.cmp-bars .r{display:grid;grid-template-columns:170px minmax(0,1fr) 92px;gap:12px;align-items:center;font-size:.88rem}
+.cmp-bars .bb{display:flex;flex-direction:column;gap:4px}
+.cmp-bars .bb i{display:block;height:8px;border-radius:999px;background:var(--brand)}
+.cmp-bars .bb i.t{background:var(--navy)}
+.cmp-bars .v{font-family:var(--font-mono);text-align:right;font-size:.82rem}
+.note{background:var(--amber-soft);border:1px solid color-mix(in srgb,var(--amber) 35%,transparent);border-radius:8px;padding:12px 14px;font-size:.86rem}
+.info{background:var(--blue-soft);border-radius:8px;padding:12px 14px;font-size:.86rem}
+
+/* Contratto */
+.doc{display:flex;gap:16px;align-items:flex-start}
+.doc .ic{width:44px;height:54px;flex:none;border:2px solid var(--blue);border-radius:4px 14px 4px 4px;display:grid;place-items:center;font-family:var(--font-mono);font-size:.62rem;color:var(--blue)}
+dl.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 18px;margin:0;font-size:.9rem}
+dl.kv dt{color:var(--muted)}
+dl.kv dd{margin:0;font-weight:500}
+ul.clean{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-size:.88rem;z-index:50}
+
+/* Posizionamento */
+.bandinfo{margin-top:14px}
+.bandinfo summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:600;color:var(--brand-tx);background:var(--blue-soft);border-radius:10px;padding:12px 16px}
+.bandinfo summary::-webkit-details-marker{display:none}
+.bandinfo .chev{font-size:1.1rem;transition:transform .2s}
+.bandinfo[open] .chev{transform:rotate(45deg)}
+.bi-body{padding:16px 4px 2px}
+.bi-def{font-size:.98rem;line-height:1.6;border-left:3px solid var(--brand);padding-left:14px}
+.bi-list{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;line-height:1.5}
+.grow{background:var(--blue-soft);border-radius:12px;padding:16px 18px;margin-bottom:16px;display:flex;flex-direction:column;gap:10px}
+.grow-h{display:grid;grid-template-columns:auto 1fr auto;gap:12px;font-size:.78rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--brand-tx);font-weight:600}
+.grow-h span:nth-child(2){text-align:center;text-transform:none;font-family:var(--font-body,inherit);letter-spacing:0;font-size:.85rem}
+.grow-r{display:grid;grid-template-columns:150px 110px minmax(60px,1fr) 170px;gap:12px;align-items:center;font-size:.88rem}
+.grow-r .nm{font-weight:600}
+.grow-r .lo{color:var(--muted);text-align:right}
+.grow-r .hi{color:var(--brand-tx);font-weight:600}
+.grow-r .gbar{display:block;height:8px;border-radius:99px;background:linear-gradient(90deg,#BFD6EC,var(--brand-2));clip-path:polygon(0 35%,100% 0,100% 100%,0 65%)}
+.rules{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+.rule{padding:10px 0;border-bottom:1px solid var(--line)}.rule:last-child{border-bottom:0}
+.rule b{display:block;font-size:.95rem;margin-bottom:4px;color:var(--ink)}
+.rule p{margin:0;font-size:.87rem;line-height:1.55;color:var(--muted)}
+:root[data-theme="dark"] .grow-r .hi,:root[data-theme="dark"] .grow-h,:root[data-theme="dark"] .bandinfo summary{color:var(--blue)} :root[data-theme="dark"] .grow-r .gbar{background:linear-gradient(90deg,#1E4A75,var(--blue))}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .grow-r .hi,:root:not([data-theme="light"]) .grow-h,:root:not([data-theme="light"]) .bandinfo summary{color:var(--blue)}:root:not([data-theme="light"]) .grow-r .gbar{background:linear-gradient(90deg,#1E4A75,var(--blue))}}
+@media (max-width:760px){.rules{grid-template-columns:minmax(0,1fr)}.grow-r{grid-template-columns:1fr 1fr;row-gap:4px}.grow-r .nm{grid-column:1/-1}.grow-r .gbar{display:none}.grow-r .lo{text-align:left}.grow-h span:nth-child(2){display:none}.grow-h{grid-template-columns:1fr 1fr}}
+.growt{width:100%;border-collapse:collapse;margin-bottom:18px;font-size:.92rem}
+.growt th{text-align:left;font-size:.75rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;padding:0 12px 8px;border-bottom:1px solid var(--line)}
+.growt td{padding:11px 12px;border-bottom:1px solid var(--line)}
+.growt tr:last-child td{border-bottom:0}
+.growt .nm{font-weight:600;width:30%}
+.growt .ar{color:var(--muted);width:40px;text-align:center}.growt td:nth-child(2),.growt th:nth-child(2){width:24%}
+.growt .hi{font-weight:600;color:var(--brand-tx)}
+:root[data-theme="dark"] .growt .hi{color:var(--blue)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .growt .hi{color:var(--blue)}}
+.gsec{margin-top:16px;background:var(--blue-soft);border-radius:12px;padding:14px}
+.gsec-t{margin:0 0 10px;font-weight:700;color:var(--ink);font-size:.98rem}
+.ggrid{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.gcard{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;display:flex;flex-direction:column;gap:10px}
+.gt{font-weight:700;font-size:.95rem;text-align:center}
+.gscale{width:100%;display:grid;grid-template-columns:minmax(0,1fr) 140px minmax(0,1fr);gap:16px;align-items:end}
+.gsteps{display:flex;align-items:flex-end;gap:3px;height:24px}
+.gsteps i{flex:1;background:var(--brand);border-radius:2px 2px 0 0}
+.glo,.ghi{font-size:.86rem;line-height:1.3;font-weight:600;min-width:0}
+.glo{text-align:right;color:#4A90D0}
+.ghi{text-align:left;color:var(--brand-tx);font-weight:700}
+.glo span,.ghi span{display:block;font-family:var(--font-mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:400;margin-bottom:1px}
+:root[data-theme="dark"] .ghi{color:var(--blue)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .ghi{color:var(--blue)}}
+@media (max-width:520px){.gscale{grid-template-columns:minmax(0,1fr) 80px minmax(0,1fr);gap:10px}}
+.lvscale{margin-top:10px}
+.lvscale summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:600;color:var(--brand-tx);background:var(--blue-soft);border-radius:10px;padding:10px 14px}
+.lvscale summary::-webkit-details-marker{display:none}
+.lvscale .chev{transition:transform .2s}
+.lvscale[open] .chev{transform:rotate(45deg)}
+:root[data-theme="dark"] .lvscale summary{color:var(--blue)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .lvscale summary{color:var(--blue)}}
+.dict{border-top:4px solid var(--brand)}
+.dsteps{display:flex;flex-direction:column;gap:10px;margin:16px 0 4px}
+.dstep{display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px;align-items:start;background:var(--blue-soft);border-radius:10px;padding:12px 14px}
+.dstep .dn{width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800;font-family:var(--font-display)}
+.dstep b{display:block;font-size:.95rem}
+.dstep p{margin:2px 0 0;font-size:.88rem;line-height:1.55;color:var(--ink)}
+.dstep p b{display:inline;font-size:inherit}
+.dict-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:14px}
+.dict-cols h4{font-size:.8rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--brand-tx);margin:0 0 8px}
+.dict-cols ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:.87rem;line-height:1.4}
+.dict-cols li.mine{font-weight:700}
+.dict-cols .pill{font-size:.65rem;margin-left:4px;vertical-align:1px}
+@media (max-width:760px){.dict-cols{grid-template-columns:minmax(0,1fr)}}
+.tbl-wrap{overflow-x:auto;margin-top:12px;border:1px solid var(--line);border-radius:10px}
+.dtable{width:100%;border-collapse:collapse;font-size:.88rem}
+.dtable th{text-align:left;font-family:var(--font-mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;padding:10px 14px;background:var(--surface-2);border-bottom:1px solid var(--line)}
+.dtable td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+.dtable tr:last-child td{border-bottom:0}
+.dtable th:nth-child(2),.dtable td:nth-child(2){width:150px}
+.dtable th:nth-child(3),.dtable td:nth-child(3){width:120px;text-align:center}
+.dtable tr.mine td{background:var(--blue-soft);font-weight:600}
+.dtable .ck{color:var(--brand-tx);font-weight:800;font-size:1rem}
+.dtag{display:inline-block;font-size:.75rem;font-weight:600;padding:3px 10px;border-radius:99px;border:1px solid var(--line);color:var(--muted);background:var(--surface)}
+.dtag.core{background:var(--brand);border-color:var(--brand);color:#fff}
+.mscope{background:var(--brand);border-color:var(--brand);color:#fff}
+.mscope .eyebrow{color:#fff!important;opacity:.85}
+.mscope .eyebrow::before{background:#fff!important}
+.mans h3{display:flex;align-items:center;gap:10px}
+.mans h3::before{content:"";width:4px;height:18px;border-radius:2px;background:var(--brand)}
+.macts{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.macts li{display:grid;grid-template-columns:8px minmax(0,1fr);gap:12px;align-items:start;padding:2px 0;line-height:1.5;font-size:.93rem}
+.macts .mn{width:8px;height:8px;border-radius:50%;background:var(--brand);margin-top:.5em}
+.mans .kv dt{color:var(--brand-tx);font-weight:700}
+:root[data-theme="dark"] .mans .kv dt{color:var(--blue)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .mans .kv dt{color:var(--blue)}}
+.boldtbl th{font-weight:700;color:var(--ink)}
+.boldtbl tbody td:first-child{font-weight:700}
+.cladder{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:end}
+.cstep{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:6px;min-width:0}
+.cstep:disabled{cursor:default}
+.cs-tag{font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--brand-tx);font-weight:600}
+.cs-name{font-weight:700;font-size:.92rem;line-height:1.25}
+.cs-bar{display:flex;flex-direction:column;justify-content:flex-end;gap:2px;min-height:var(--h);padding:10px 12px;border-radius:10px 10px 4px 4px;background:var(--blue-soft);color:var(--brand-tx);border:2px solid transparent;transition:border-color .15s}
+.cs-bar b{font-size:1rem}
+.cs-bar span{font-size:.78rem;line-height:1.3}
+.cs-bar .cs-sc{font-family:var(--font-mono);opacity:.8}
+.cstep.cur .cs-bar{background:var(--brand);color:#fff}
+.cstep.sel .cs-bar{border-color:var(--brand);background:var(--surface)}
+.cstep:not(:disabled):hover .cs-bar{border-color:var(--brand)}
+.hsteps{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:10px}
+.hs{display:grid;grid-template-columns:32px minmax(0,1fr);gap:12px;align-items:start;background:var(--blue-soft);border-radius:10px;padding:12px 14px}
+.hs .dn{width:30px;height:30px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800}
+.hs b{display:block;font-size:.93rem}
+.hs p{margin:2px 0 0;font-size:.85rem;line-height:1.5}
+.cg-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.cg-b{display:flex;flex-direction:column;padding:12px 18px;border-radius:12px;background:var(--blue-soft);color:var(--brand-tx);min-width:180px}
+.cg-b b{font-family:var(--font-display);font-size:1.5rem;font-weight:800;line-height:1.2}
+.cg-b.to{background:var(--brand);color:#fff}
+.cg-arr{font-size:1.6rem;color:var(--brand-tx)}
+.cg-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:10px}
+.cg-t{font-family:var(--font-mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--brand-tx);font-weight:600;margin-bottom:6px}
+.cg-r{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+.cg-r .cg-v{font-family:var(--font-mono);white-space:nowrap}
+.cg-r.tot{border-bottom:0;font-weight:700;color:var(--brand-tx)}
+:root[data-theme="dark"] .cs-bar,:root[data-theme="dark"] .cg-b{color:var(--blue)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cs-bar,:root:not([data-theme="light"]) .cg-b{color:var(--blue)}}
+@media (max-width:860px){.hsteps,.cg-cols{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:620px){.cladder{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.hs-note{margin-top:12px;border-left:3px solid var(--brand);padding:4px 0 4px 14px;font-size:.9rem;line-height:1.55}
+.cg-line{font-size:1rem;margin:4px 0 4px}
+.cgt td.c,.cgt th.c{width:130px;text-align:center}
+.cgt tr.tot td{background:var(--blue-soft);color:var(--brand-tx);font-weight:700;border-top:1px solid var(--line)}
+.cgt th{color:var(--brand-tx)!important;font-weight:700}
+:root[data-theme="dark"] .cgt th{color:var(--blue)!important}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cgt th{color:var(--blue)!important}}
+.newtag{display:block;width:fit-content;margin-top:6px;padding:2px 10px;border-radius:99px;border:1px solid var(--brand);color:var(--brand-tx);background:var(--blue-soft);font-size:.72rem;font-weight:700;white-space:nowrap;vertical-align:1px}
+.cstep.from .cs-bar{border-color:var(--brand);border-style:dashed}
+.fb{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:99px;white-space:nowrap;color:#fff}
+.fb.f1{background:#9DBFE3;color:#062A4D}.fb.f2{background:#86AFDA;color:#062A4D}.fb.f3{background:#5B92CB}.fb.f4{background:#3277BA}.fb.f5{background:#1F69AE}.fb.f6{background:#0060A6}.fb.f7{background:#00427A}
+.otop{margin:0 auto 14px;width:fit-content;background:var(--brand);color:#fff;font-weight:700;padding:8px 16px;border-radius:10px;font-size:.92rem}
+.ogrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start}
+.oarea{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--surface-2);display:flex;flex-direction:column;gap:8px}
+.oarea.mine{border:2px solid var(--brand);background:var(--blue-soft)}
+.oa-h{font-family:var(--font-mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--brand-tx);font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.oa-you{font-family:var(--font-body,inherit);text-transform:none;letter-spacing:0;background:var(--brand);color:#fff;border-radius:99px;padding:1px 8px;font-size:.68rem}
+.onode{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.onode.lead{border-left:3px solid var(--brand)}
+.onode.me{border:2px solid var(--brand)}
+.on-nm{font-weight:700;font-size:.87rem;line-height:1.3}
+.on-sc{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.oa-kids{display:flex;flex-direction:column;gap:6px;padding-left:12px;border-left:2px solid var(--line);margin-left:6px}
+.dist{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.drow{display:grid;grid-template-columns:200px 120px minmax(0,1fr);gap:14px;align-items:center;padding:8px 10px;border-radius:8px}
+.drow.me{background:var(--blue-soft)}
+.dr-f{display:flex;flex-direction:column;gap:2px;align-items:flex-start}
+.dr-bar{display:flex;align-items:center;gap:8px}
+.dr-bar i{display:block;height:10px;border-radius:99px;background:var(--brand);min-width:2px}
+.dr-bar b{font-family:var(--font-mono);font-size:.85rem}
+.dtable tr.mine td,.cgt tr.mine td{background:var(--blue-soft)}
+@media (max-width:980px){.ogrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){.ogrid{grid-template-columns:minmax(0,1fr)}.drow{grid-template-columns:minmax(0,1fr)}}
+.tree-wrap{overflow-x:auto;padding-bottom:6px}
+.tree{min-width:920px}
+.ttop{display:flex;justify-content:center;position:relative;padding-bottom:18px}
+.ttop::after{content:"";position:absolute;left:50%;bottom:0;height:18px;border-left:2px solid var(--line)}
+.tcols{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;position:relative;padding-top:18px}
+.tcols::before{content:"";position:absolute;top:0;left:calc(100%/12);right:calc(100%/12);border-top:2px solid var(--line)}
+.tcol{position:relative;display:flex;flex-direction:column;align-items:stretch}
+.tcol::before{content:"";position:absolute;top:-18px;left:50%;height:18px;border-left:2px solid var(--line)}
+.tnode{position:relative;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:3px;text-align:center;font-size:.8rem;line-height:1.25;border:2px solid transparent}
+.tnode b{font-size:.82rem}
+.tnode .t-f{font-size:.72rem;font-family:var(--font-mono);opacity:.9}
+.tnode .t-n{font-size:.68rem;opacity:.85}
+.tnode.root{background:var(--surface);border:2px solid var(--brand);color:var(--brand-tx);padding:10px 18px}
+.tnode.f1,.tsw.f1{background:#D3E3F3;color:#062A4D}
+.tnode.f2,.tsw.f2{background:#AFCBE8;color:#062A4D}
+.tnode.f3,.tsw.f3{background:#86AFDA;color:#062A4D}
+.tnode.f4,.tsw.f4{background:#5B92CB;color:#fff}
+.tnode.f5,.tsw.f5{background:#3277BA;color:#fff}
+.tnode.f6,.tsw.f6{background:#0060A6;color:#fff}
+.tnode.f7,.tsw.f7{background:#00427A;color:#fff}
+.tnode.me{border-color:#F2A900;box-shadow:0 0 0 3px color-mix(in srgb,#F2A900 30%,transparent)}
+.t-you{position:absolute;top:-9px;right:8px;background:#F2A900;color:#062A4D;font-size:.62rem;font-weight:800;padding:1px 7px;border-radius:99px}
+.tkids{display:flex;flex-direction:column;gap:8px;margin-top:8px;padding-left:12px;border-left:2px solid var(--line);margin-left:10px}
+.tk{position:relative;display:flex;flex-direction:column}
+.tk::before{content:"";position:absolute;left:-14px;top:18px;width:12px;border-top:2px solid var(--line)}
+.tk>.tkids{margin-left:10px}
+.tlegend{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;font-size:.8rem}
+.tlegend span{display:inline-flex;align-items:center;gap:5px}
+.tsw{display:inline-block;width:16px;height:12px;border-radius:3px}
+.orgimg-wrap{overflow-x:auto;background:#fff;border-radius:10px;border:1px solid var(--line);padding:10px}
+.orgimg{display:block;width:100%;min-width:760px;height:auto}
+.dtbl td{vertical-align:top}.dtbl td:first-child{width:220px}
+.cmp2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.cmp-col{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface-2)}
+.cmp-col.on{background:var(--blue-soft);border-color:var(--brand)}
+.cmp-h{font-weight:800;font-family:var(--font-display);font-size:1.05rem;color:var(--brand-tx);margin-bottom:8px}
+.cmp-col ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:.9rem;line-height:1.5}
+.cmp-key{margin-top:14px;background:var(--brand);color:#fff;border-radius:10px;padding:12px 16px;font-weight:700;text-align:center}
+@media (max-width:760px){.cmp2{grid-template-columns:minmax(0,1fr)}}
+.ynl{list-style:none;padding-left:0!important}
+.vlist{gap:10px!important}
+.vlist li b{display:block;color:var(--ink)}
+.bands3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.bands3>div{border-radius:10px;padding:10px 14px;background:var(--surface);border:1.5px solid var(--brand);display:flex;flex-direction:column;gap:2px}
+
+.bands3 b{font-size:1rem}.bands3 small{font-size:.75rem;opacity:.85}
+@media (max-width:620px){.bands3{grid-template-columns:minmax(0,1fr)}}
+.cons h3{margin-bottom:6px}
+.cons-row{border-bottom:1px solid var(--line)}
+.cons-row:last-child{border-bottom:0}
+.cons-row summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) 18px;gap:14px;align-items:center;padding:10px 0}
+.cons-row summary::-webkit-details-marker{display:none}
+.cons-row .nm{font-weight:600;font-size:.93rem}
+.cons-row .chev{color:var(--muted);text-align:center;transition:transform .2s}
+.cons-row[open] .chev{transform:rotate(45deg)}
+.cons-body{padding:0 0 10px}
+@media (max-width:620px){.cons-row summary{grid-template-columns:minmax(0,1fr) 18px}.cons-row summary .small{grid-column:1;grid-row:2}}
+.crit-scs{display:flex;align-items:center;gap:14px}.crit-arr{color:#fff;opacity:.7;font-size:1.2rem}
+.crit-strip{display:flex;justify-content:flex-end;align-items:center;background:var(--surface);margin:4px -22px -22px;padding:12px 22px;border-top:1px solid var(--line,#e5e7eb)}
+.crit-strip b{font-family:var(--font-display);font-size:1.15rem}.crit-strip small{font-size:.75rem;font-weight:500;opacity:.85}
+.simgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:24px;align-items:center;margin-top:10px}
+.sim-radar svg{max-width:440px;width:100%;height:auto;display:block;margin:0 auto}
+@media (max-width:860px){.simgrid{grid-template-columns:minmax(0,1fr)}}
+.stx{font-size:.85rem;color:var(--muted);display:inline-flex;align-items:center;gap:6px}.stx::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.stx.neg{color:var(--red)}.stx.neg::before{background:var(--red)}.stx.pos{color:var(--green)}.stx.pos::before{background:var(--green)}
+.kpi-sm .card{padding:12px 16px}.kpi-sm .v{font-size:1.4rem!important}.kpi-sm .l{font-size:.8rem}
+.career th.c,.career td.c{text-align:center;width:17%}
+.career thead th{font-family:var(--font-body,inherit)!important;text-transform:none!important;letter-spacing:0!important;font-size:.9rem!important;font-weight:700;color:var(--ink)!important;vertical-align:bottom}
+.career .fasc{display:block;margin-top:4px;font-size:.82rem;font-weight:600;color:var(--brand-tx)}
+.career .here{font-family:var(--font-mono);text-transform:uppercase}
+.career th.me,.career td.me{background:var(--blue-soft)}
+.career th.me{color:var(--brand-tx)!important}
+.career .here{display:block;font-size:.6rem;letter-spacing:.08em;color:var(--brand-tx);margin-bottom:2px}
+.career .delta{display:block;font-size:.72rem;color:var(--green);font-weight:600}
+.career tr.tot td{background:var(--blue-soft)}
+.next{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border-left:4px solid var(--brand)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.8rem;background:var(--surface-2);border:1px solid var(--line);border-radius:99px;padding:3px 10px}
+.chip b{color:var(--brand-tx);margin-left:4px}
+.calc{padding:16px 20px}
+.calc-t{font-weight:700;margin-bottom:12px}
+.calc-steps{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-items:stretch;max-width:760px}.calc-steps i{display:none}.calc-steps>div{font-size:1rem!important;padding:11px 14px!important;align-items:center!important}.calc-steps b{flex:0 0 26px!important;height:26px!important;font-size:.85rem!important}.calc-t{font-size:1.05rem}
+.calc-steps>div{background:var(--surface-2);border-radius:10px;padding:10px 12px;display:flex;gap:10px;align-items:flex-start;font-size:.88rem;line-height:1.45}
+.calc-steps b{flex:0 0 22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:.75rem}
+.calc-steps i{font-style:normal;color:var(--brand-tx);align-self:center;font-size:1.1rem}
+.calc-ex{margin-top:12px;font-size:.88rem;color:var(--muted)}
+.calc-ex b{color:var(--brand-tx)}
+@media (max-width:760px){.calc-steps{grid-template-columns:minmax(0,1fr)}.calc-steps i{display:none}}
+.pos-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:28px;align-items:center}
+.pos-band{display:flex;gap:18px;align-items:center}
+.pos-band .n{width:84px;height:84px;border-radius:16px;background:var(--brand-2);color:var(--on-brand);display:grid;place-items:center;font-family:var(--font-display);font-weight:800;font-size:2.8rem;flex:none}
+.pos-band .nm{font-family:var(--font-display);font-weight:800;font-size:1.6rem;line-height:1.15}
+.mean{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.mean>div{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+.mean b{display:block;font-family:var(--font-display);margin-bottom:4px}
+.mean p{color:var(--muted);font-size:.88rem}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.tile .k{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.tile .nm{font-family:var(--font-display);font-weight:700;font-size:1.02rem;line-height:1.2}
+.tile .q{color:var(--muted);font-size:.85rem}
+.tile .v{font-family:var(--font-display);font-weight:800;font-size:2rem;color:var(--brand-tx);font-variant-numeric:tabular-nums;line-height:1.1}
+.tile .votes{margin-top:auto;border-top:1px dashed var(--line);padding-top:8px;font-size:.8rem;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+.tile .votes b{font-family:var(--font-mono);color:var(--ink);font-weight:500}
+.crows{display:flex;flex-direction:column;gap:10px}
+.crow{display:grid;grid-template-columns:220px minmax(0,1fr) 260px 90px;gap:20px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 20px}
+.crow .k{display:block;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.crow .nm{display:block;font-family:var(--font-display);font-weight:700;font-size:1.02rem;margin-top:2px}
+.crow .q{color:var(--muted);font-size:.9rem}
+.crow .votes{font-size:.84rem;color:var(--muted);display:flex;flex-direction:column;gap:2px;border-left:1px solid var(--line);padding-left:16px}
+.crow .sc{display:flex;flex-direction:column;align-items:flex-end}
+.crow .sc b{font-family:var(--font-display);font-weight:800;font-size:1.6rem;color:var(--brand-tx);font-variant-numeric:tabular-nums;line-height:1}
+.crow .sc span{font-size:.7rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.linkish{border:0;background:none;padding:0;color:var(--blue);font:inherit;font-size:.84rem;font-weight:600;cursor:pointer;text-align:left}
+.crow .votes b{font-family:var(--font-mono);color:var(--ink);font-weight:500}
+@media (max-width:860px){.crow{grid-template-columns:minmax(0,1fr);gap:8px}.crow .sc{align-items:flex-start}.crow .votes{border-left:0;padding-left:0;border-top:1px dashed var(--line);padding-top:8px}}
+.dots i.on.g{background:var(--green-brand)}
+.simrow{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-top:10px;display:flex;flex-direction:column;gap:8px;background:var(--surface-2)}
+.simrow .nm{font-weight:600;font-size:.92rem}
+.simlv{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.simfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.simtot{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px;padding:12px 14px;background:var(--blue-soft);border-radius:8px}
+.simtot b{font-size:1.15rem}
+.crs{border-top:1px solid var(--line);padding:14px 0;display:flex;flex-direction:column;gap:8px}
+.crs:last-child{padding-bottom:0}
+.crs-h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+.crs-c{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;background:var(--surface-2);border-radius:8px;padding:10px 12px;font-size:.92rem}
+.crit-card{display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.crit-h{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;background:var(--surface);margin:-22px -22px 0;padding:14px 22px 12px;border-top:4px solid var(--brand);border-bottom:1px solid var(--line,#e5e7eb)}
+.crit-h h2{margin:0!important;font-size:1.15rem}.crit-h .eyebrow{margin-bottom:2px!important;display:block}.crit-h p{margin-top:1px!important;font-size:.88rem}.crit-h .eyebrow{font-size:.62rem}
+.crit-h h2{color:var(--brand-tx)!important}.crit-h p,.crit-h .muted{color:var(--muted)!important}
+.crit-h .eyebrow{opacity:.8}.crit-h p{opacity:.9}
+.crit-h .eyebrow::before{background:#fff!important}
+.crit-sc{display:flex;flex-direction:column;align-items:flex-end}
+.crit-sc b{font-family:var(--font-display);font-weight:800;font-size:1.6rem;color:var(--brand-tx);line-height:1}
+.crit-sc sup{font-size:.55em;vertical-align:super;margin-left:1px}
+.footnote{margin:-14px 2px 4px;line-height:1.5;max-width:80ch}
+.crit-sc span{font-size:.7rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.sub{display:flex;flex-direction:column;gap:8px}
+.sub+.sub{border-top:1px dashed var(--line);padding-top:14px}
+.sub-h{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;background:var(--surface-2);border-radius:8px;padding:10px 14px}
+@media (max-width:620px){.sub-h{grid-template-columns:minmax(0,1fr)}}
+.sub-h .nm{font-weight:600}
+.vote{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.vote b{font-size:1.15rem}
+.lvbox{padding:2px 14px;font-size:.9rem;line-height:1.55}
+.allv summary{cursor:pointer;list-style:none;padding:2px 14px;font-size:.9rem;line-height:1.55}.allv summary::-webkit-details-marker{display:none}.allv .lvlink{color:var(--blue);font-size:.84rem;font-weight:600;white-space:nowrap;margin-left:6px}.allv .lvlink::after{content:" ▾"}.allv[open] .lvlink::after{content:" ▴"}
+.allv ol{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:var(--muted)}
+.allv li{padding:6px 10px;border-radius:6px}
+.allv li.me{background:var(--blue-soft);color:var(--ink)}
+.sumrow{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 20px}
+.sumrow .nm{font-weight:600;margin-bottom:2px}
+.sumrow b{font-family:var(--font-display);font-weight:800;font-size:2rem;color:var(--brand-tx);font-variant-numeric:tabular-nums}
+.sumrow.strong{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.sumrow.strong b{color:var(--on-brand)}
+.equation{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:var(--blue-soft);border-radius:var(--radius);padding:16px 20px;font-family:var(--font-mono);font-size:1rem}
+.equation .res{font-family:var(--font-display);font-weight:800;font-size:1.5rem;color:var(--brand-tx)}
+.team{display:flex;flex-direction:column;gap:8px}
+.team .r{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:14px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2)}
+.team .r.me{background:var(--blue-soft);border-color:var(--blue)}
+.team .r .nm{font-weight:600}
+.team .r .sc{font-family:var(--font-mono);font-size:.82rem;color:var(--muted);white-space:nowrap}
+@media (max-width:1020px){.pos-hero,.mean{grid-template-columns:minmax(0,1fr)}.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:700px){.tiles{grid-template-columns:minmax(0,1fr)}}
+
+/* Accesso */
+.login{max-width:1080px;margin:48px auto;padding-inline:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;align-items:stretch}
+.login-card{background:var(--surface);border:1px solid var(--line);border-radius:14px 0 0 14px;padding:40px;display:flex;flex-direction:column;gap:14px}
+.login-card h1{font-size:1.9rem}
+.login-mark{font-family:var(--font-display);font-weight:700;font-size:1.3rem;color:var(--blue);display:flex;align-items:center;gap:10px}
+.login-mark i{display:inline-block;width:20px;height:24px;border-radius:3px;background:var(--brand)}
+.login form{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.login label{font-size:.84rem;font-weight:600;margin-top:8px}
+.login input{font:inherit;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);color:var(--ink)}
+.login input:focus{outline:2px solid var(--brand);outline-offset:1px}
+.btn.lg{padding:12px 16px;font-size:.95rem;margin-top:16px}
+.login-foot{margin-top:4px}
+.login-side{background:#0060A6;color:#fff;border-radius:0 14px 14px 0;padding:40px;display:flex;flex-direction:column;justify-content:center;gap:16px}
+.login-side .tunnel{width:100%;max-width:200px;height:auto;align-self:center;margin-bottom:8px}
+.login-side h2{font-size:1.7rem;line-height:1.2;color:#fff}
+.login-side ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px;opacity:.95}
+.logout{border:1px solid rgba(255,255,255,.5);background:none;color:#fff;border-radius:6px;padding:4px 10px;font-size:.8rem;cursor:pointer}
+@media (max-width:800px){.login{grid-template-columns:minmax(0,1fr);margin:24px auto}.login-card{border-radius:14px 14px 0 0;padding:28px}.login-side{border-radius:0 0 14px 14px;padding:28px}}
+@media (max-width: 1020px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  nav.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 56px);z-index:10;flex-direction:row;overflow-x:auto;background:var(--bg);margin-inline:-20px;padding:8px 20px;border-bottom:1px solid var(--line);scrollbar-width:none}
+  nav.side .navlabel,.side-foot{display:none}
+  nav.side button{white-space:nowrap;flex:none}
+  nav.side button[aria-current="true"]{box-shadow:inset 0 -3px 0 var(--brand)}
+  .g-main,.g3{grid-template-columns:minmax(0,1fr)}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .topbar .portal{display:none}
+}
+@media (max-width: 700px){
+  .shell{padding-inline:16px}
+  nav.side{margin-inline:-16px;padding-inline:16px}
+  .g2,.g4,.hero-meta,.evalhead,.howto,.timeline{grid-template-columns:minmax(0,1fr)}
+  .hero-meta>div{border-right:0;border-bottom:1px solid var(--line)}
+  .scale{grid-template-columns:minmax(0,1fr)}
+  .path{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .comp summary{grid-template-columns:minmax(0,1fr)}
+  .comp .facts{grid-template-columns:repeat(2,auto) ;justify-content:start;row-gap:10px}.comp .facts .chev{display:none}
+  .fact{align-items:stretch;text-align:right}
+  .comp .body{grid-template-columns:minmax(0,1fr)}
+  .read-item{grid-template-columns:minmax(0,1fr)}
+  .read-item .pill{justify-self:start}
+  .goal{grid-template-columns:minmax(0,1fr)}
+  .goal .res{text-align:left}
+  .cmp-bars .r{grid-template-columns:minmax(0,1fr) 80px}
+  .cmp-bars .bb{grid-column:1 / -1;grid-row:2}
+  .topbar .who span{display:none}
+  .topbar-in{padding-inline:16px}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+/* competenze: versione semplificata */
+.complist{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden}
+.complist .comp{border:0;border-radius:0;border-top:1px solid var(--line)}
+.comp-hd{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;padding:12px 20px;background:var(--surface-2);font-size:.82rem;font-weight:600;color:var(--muted)}
+.comp-hd .facts{display:grid;grid-template-columns:90px 110px 100px 50px 16px;column-gap:22px;justify-content:end}
+.comp-hd .facts span{text-align:right}
+.complist .comp .facts{grid-template-columns:90px 110px 100px 50px 16px}
+.complist .fact b{font-family:var(--font-body);font-weight:600;font-size:.95rem}
+.complist .fact>span{display:none}
+.complist .comp .body{border-top:0;padding-top:0}
+.complist .comp[open] summary{padding-bottom:12px}
+.bl{font-weight:700;font-size:.85rem;margin-bottom:4px}
+.dstep{background:none;border-radius:0;padding:12px 0;border-top:1px solid var(--line)}
+.dstep:first-child{border-top:0;padding-top:4px}
+.dsteps{gap:0}
+.dstep .dn{width:28px;height:28px;font-size:.9rem}
+@media (max-width:760px){.comp-hd{display:none}.complist .fact>span{display:block;font-family:var(--font-body);text-transform:none;letter-spacing:0;font-size:.75rem}.complist .comp .facts{grid-template-columns:repeat(2,auto)}}
+.crit4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 14px}
+.crit4>div{border-radius:10px;padding:12px 14px;font-weight:700;color:#fff;text-align:center;display:flex;align-items:center;justify-content:center}.crit4>div:nth-child(1){background:#5B92CB}.crit4>div:nth-child(2){background:#3277BA}.crit4>div:nth-child(3){background:#0060A6}.crit4>div:nth-child(4){background:#00427A}
+@media (max-width:760px){.crit4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.doc-sm{padding:14px 16px}
+.doc-sm .doc{gap:12px}
+.doc-sm .ic{width:34px;height:42px;font-size:.55rem}
+.doc-sm h3{font-size:.98rem;margin-bottom:4px!important}
+.doc-sm dl.kv{font-size:.85rem;margin-bottom:10px!important;row-gap:2px}
+.doc-sm dl.kv dt,.doc-sm dl.kv dd{padding:1px 0}
+.doc-sm .btn{padding:5px 12px;font-size:.8rem}
+#main>*+*{margin-top:60px}
+#main>.sec-head+*{margin-top:0}
+.stack .stack{gap:44px}
+.crit-card+.crit-card,.crit-card+.sumrow,.calc+.crit-card{margin-top:30px}
+.sumrow+.sumrow{margin-top:-44px}
+.stack>:is(h2,h3,div:not(.card):has(>h2:first-child))+*{margin-top:-44px}
+.stack .stack>:is(h2,h3,div:not(.card):has(>h2:first-child))+*{margin-top:-28px}
+.dtbl td{padding-top:8px!important;padding-bottom:8px!important;vertical-align:middle!important}.dtbl td:first-child{width:300px;white-space:nowrap}
+.rchips{display:flex;flex-wrap:wrap;gap:4px 6px}.rchips span{font-size:.85rem;padding:2px 9px;border:1px solid var(--line);border-radius:99px;background:var(--surface)}.rchips span.me{font-weight:700;border-color:var(--brand);color:var(--brand-tx)}
+.rise{display:grid;grid-template-columns:280px minmax(0,1fr);gap:24px;align-items:end;margin:18px 0 14px;padding:16px 18px;border:1px solid var(--line);border-radius:10px}
+.rise-bars{display:flex;align-items:flex-end;gap:5px;height:96px;position:relative}
+.rise-bars>div{flex:1;border-radius:5px 5px 0 0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px}
+.rise-bars span{font-size:.72rem;font-weight:700;color:#fff}.rise-bars>div:nth-child(-n+3) span{color:#062A4D}
+.rise-arr{position:absolute;left:0;top:-14px;width:100%;height:96px;overflow:visible;pointer-events:none}
+.rise-cap{margin:0;font-size:1rem;line-height:1.55}
+@media (max-width:620px){.rise{grid-template-columns:minmax(0,1fr)}}
+</style>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="wordmark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="213 248 416 100" class="glogo" role="img" aria-label="Ghella"><path fill-rule="nonzero" fill="rgb(100%, 100%, 100%)" fill-opacity="1" d="M 278.554688 313.109375 L 278.554688 281.800781 C 278.554688 264.507812 264.589844 250.488281 247.367188 250.488281 C 230.144531 250.488281 216.183594 264.507812 216.183594 281.800781 L 216.183594 302.671875 C 216.183594 302.671875 235.761719 295.902344 243.890625 293.089844 L 243.890625 283.316406 C 243.890625 279.488281 246.996094 276.386719 250.824219 276.386719 C 254.652344 276.386719 257.753906 279.488281 257.753906 283.316406 L 257.753906 290.726562 C 257.757812 290.726562 257.761719 290.726562 257.761719 290.722656 L 257.761719 296.5 C 257.761719 296.570312 257.757812 296.636719 257.753906 296.703125 L 257.753906 307.070312 C 257.753906 307.152344 257.742188 307.234375 257.742188 307.316406 L 257.742188 311.203125 C 257.742188 316.964844 253.085938 321.640625 247.347656 321.640625 C 242.109375 321.640625 237.777344 317.75 237.058594 312.691406 L 216.183594 312.691406 L 216.183594 313.109375 C 216.183594 330.402344 230.144531 344.421875 247.367188 344.421875 C 264.589844 344.421875 278.554688 330.402344 278.554688 313.109375 "/> <path fill-rule="nonzero" fill="rgb(100%, 100%, 100%)" fill-opacity="1" d="M 338.261719 305.804688 C 355.34375 305.804688 367.847656 291.078125 365.882812 274.84375 L 334.664062 274.84375 L 334.664062 284.664062 L 350.632812 284.664062 C 348.929688 289.574219 343.695312 292.910156 338.132812 292.910156 C 329.035156 292.910156 323.273438 286.105469 323.273438 277.988281 C 323.273438 269.871094 329.164062 263.0625 338.261719 263.0625 C 343.367188 263.0625 347.753906 265.8125 349.714844 269.804688 L 364.964844 269.742188 C 361.695312 258.480469 351.484375 249.84375 338.261719 249.84375 C 321.964844 249.84375 310.25 262.867188 310.25 277.789062 C 310.25 292.78125 321.964844 305.804688 338.261719 305.804688 M 382.769531 304.824219 L 395.925781 304.824219 L 395.925781 283.746094 L 409.210938 283.746094 L 409.210938 304.824219 L 422.433594 304.824219 L 422.433594 250.824219 L 409.210938 250.824219 L 409.210938 271.113281 L 395.925781 271.113281 L 395.925781 250.824219 L 382.769531 250.824219 Z M 441.21875 304.824219 L 471.980469 304.824219 L 471.980469 292.320312 L 454.371094 292.320312 L 454.371094 282.503906 L 470.472656 282.503906 L 470.472656 272.6875 L 454.371094 272.6875 L 454.371094 263.390625 L 471.980469 263.390625 L 471.980469 251.019531 L 441.21875 251.019531 Z M 489.390625 304.824219 L 518.386719 304.824219 L 518.386719 292.320312 L 502.546875 292.320312 L 502.546875 250.824219 L 489.390625 250.824219 Z M 533.699219 304.824219 L 562.695312 304.824219 L 562.695312 292.320312 L 546.855469 292.320312 L 546.855469 250.824219 L 533.699219 250.824219 Z M 612.113281 304.824219 L 625.597656 304.824219 L 606.289062 250.957031 L 592.671875 250.957031 L 573.039062 304.824219 L 586.847656 304.824219 L 589.074219 298.148438 L 609.886719 298.148438 Z M 592.476562 287.871094 L 599.480469 266.597656 L 606.484375 287.871094 Z M 592.476562 287.871094 "/> <path fill-rule="nonzero" fill="rgb(100%, 100%, 100%)" fill-opacity="1" d="M 425.351562 344.445312 L 429.800781 344.445312 L 429.800781 326.289062 L 424.117188 326.289062 L 422.683594 330.5625 L 425.351562 330.5625 Z M 451.152344 344.710938 C 454.898438 344.710938 457.675781 342.222656 457.675781 338.453125 C 457.675781 336.667969 456.816406 335.058594 455.40625 334.066406 C 456.199219 333.339844 456.640625 332.414062 456.640625 331.226562 C 456.640625 328.140625 454.128906 326.003906 451.199219 326.003906 C 448.246094 326.003906 445.734375 328.160156 445.734375 331.226562 C 445.734375 332.394531 446.152344 333.320312 446.921875 334.023438 C 445.511719 335.015625 444.632812 336.667969 444.632812 338.453125 C 444.652344 342.15625 447.648438 344.710938 451.152344 344.710938 M 451.199219 332.964844 C 450.226562 332.964844 449.414062 332.328125 449.414062 331.355469 C 449.414062 330.433594 450.226562 329.75 451.199219 329.75 C 452.144531 329.75 452.9375 330.433594 452.9375 331.355469 C 452.9375 332.347656 452.144531 332.964844 451.199219 332.964844 M 451.152344 340.480469 C 449.898438 340.480469 448.882812 339.621094 448.882812 338.410156 C 448.882812 337.195312 449.898438 336.359375 451.152344 336.359375 C 452.410156 336.359375 453.445312 337.195312 453.445312 338.410156 C 453.445312 339.621094 452.410156 340.480469 451.152344 340.480469 M 485.59375 332.832031 C 485.417969 329.023438 482.75 325.980469 478.695312 325.980469 C 474.445312 325.980469 471.777344 329.023438 471.777344 332.703125 C 471.777344 336.382812 474.179688 339.222656 478.585938 339.269531 L 475.390625 344.445312 L 480.238281 344.445312 L 483.722656 338.628906 C 485.132812 336.316406 485.660156 334.683594 485.59375 332.832031 M 476.140625 332.921875 C 476.140625 331.46875 477.265625 330.367188 478.695312 330.367188 C 480.109375 330.367188 481.230469 331.46875 481.230469 332.921875 C 481.230469 334.332031 480.109375 335.390625 478.695312 335.390625 C 477.265625 335.390625 476.140625 334.332031 476.140625 332.921875 M 506.4375 344.445312 L 510.867188 344.445312 L 510.867188 341.25 L 512.695312 341.25 L 512.695312 337.835938 L 510.867188 337.835938 L 510.867188 326.3125 L 506.746094 326.3125 L 498.683594 337.8125 L 498.683594 341.230469 L 506.4375 341.230469 Z M 502.9375 337.878906 L 506.527344 332.832031 L 506.527344 337.878906 Z M 502.9375 337.878906 "/></svg></div>
+    <div class="portal">People · My Tunnel</div>
+    <div class="who" id="who"><button type="button" class="logout" data-logout>Esci</button><span>Mario Sannino</span><div class="avatar" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></div></div>
+  </div>
+</header>
+
+<section class="login" id="login" hidden>
+  <div class="login-card">
+    <div class="login-mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="213 248 416 100" class="glogo" role="img" aria-label="Ghella"><path fill-rule="nonzero" fill="rgb(6.362915%, 32.530212%, 56.738281%)" fill-opacity="1" d="M 278.554688 313.109375 L 278.554688 281.800781 C 278.554688 264.507812 264.589844 250.488281 247.367188 250.488281 C 230.144531 250.488281 216.183594 264.507812 216.183594 281.800781 L 216.183594 302.671875 C 216.183594 302.671875 235.761719 295.902344 243.890625 293.089844 L 243.890625 283.316406 C 243.890625 279.488281 246.996094 276.386719 250.824219 276.386719 C 254.652344 276.386719 257.753906 279.488281 257.753906 283.316406 L 257.753906 290.726562 C 257.757812 290.726562 257.761719 290.726562 257.761719 290.722656 L 257.761719 296.5 C 257.761719 296.570312 257.757812 296.636719 257.753906 296.703125 L 257.753906 307.070312 C 257.753906 307.152344 257.742188 307.234375 257.742188 307.316406 L 257.742188 311.203125 C 257.742188 316.964844 253.085938 321.640625 247.347656 321.640625 C 242.109375 321.640625 237.777344 317.75 237.058594 312.691406 L 216.183594 312.691406 L 216.183594 313.109375 C 216.183594 330.402344 230.144531 344.421875 247.367188 344.421875 C 264.589844 344.421875 278.554688 330.402344 278.554688 313.109375 "/> <path fill-rule="nonzero" fill="rgb(6.362915%, 32.530212%, 56.738281%)" fill-opacity="1" d="M 338.261719 305.804688 C 355.34375 305.804688 367.847656 291.078125 365.882812 274.84375 L 334.664062 274.84375 L 334.664062 284.664062 L 350.632812 284.664062 C 348.929688 289.574219 343.695312 292.910156 338.132812 292.910156 C 329.035156 292.910156 323.273438 286.105469 323.273438 277.988281 C 323.273438 269.871094 329.164062 263.0625 338.261719 263.0625 C 343.367188 263.0625 347.753906 265.8125 349.714844 269.804688 L 364.964844 269.742188 C 361.695312 258.480469 351.484375 249.84375 338.261719 249.84375 C 321.964844 249.84375 310.25 262.867188 310.25 277.789062 C 310.25 292.78125 321.964844 305.804688 338.261719 305.804688 M 382.769531 304.824219 L 395.925781 304.824219 L 395.925781 283.746094 L 409.210938 283.746094 L 409.210938 304.824219 L 422.433594 304.824219 L 422.433594 250.824219 L 409.210938 250.824219 L 409.210938 271.113281 L 395.925781 271.113281 L 395.925781 250.824219 L 382.769531 250.824219 Z M 441.21875 304.824219 L 471.980469 304.824219 L 471.980469 292.320312 L 454.371094 292.320312 L 454.371094 282.503906 L 470.472656 282.503906 L 470.472656 272.6875 L 454.371094 272.6875 L 454.371094 263.390625 L 471.980469 263.390625 L 471.980469 251.019531 L 441.21875 251.019531 Z M 489.390625 304.824219 L 518.386719 304.824219 L 518.386719 292.320312 L 502.546875 292.320312 L 502.546875 250.824219 L 489.390625 250.824219 Z M 533.699219 304.824219 L 562.695312 304.824219 L 562.695312 292.320312 L 546.855469 292.320312 L 546.855469 250.824219 L 533.699219 250.824219 Z M 612.113281 304.824219 L 625.597656 304.824219 L 606.289062 250.957031 L 592.671875 250.957031 L 573.039062 304.824219 L 586.847656 304.824219 L 589.074219 298.148438 L 609.886719 298.148438 Z M 592.476562 287.871094 L 599.480469 266.597656 L 606.484375 287.871094 Z M 592.476562 287.871094 "/> <path fill-rule="nonzero" fill="rgb(6.362915%, 32.530212%, 56.738281%)" fill-opacity="1" d="M 425.351562 344.445312 L 429.800781 344.445312 L 429.800781 326.289062 L 424.117188 326.289062 L 422.683594 330.5625 L 425.351562 330.5625 Z M 451.152344 344.710938 C 454.898438 344.710938 457.675781 342.222656 457.675781 338.453125 C 457.675781 336.667969 456.816406 335.058594 455.40625 334.066406 C 456.199219 333.339844 456.640625 332.414062 456.640625 331.226562 C 456.640625 328.140625 454.128906 326.003906 451.199219 326.003906 C 448.246094 326.003906 445.734375 328.160156 445.734375 331.226562 C 445.734375 332.394531 446.152344 333.320312 446.921875 334.023438 C 445.511719 335.015625 444.632812 336.667969 444.632812 338.453125 C 444.652344 342.15625 447.648438 344.710938 451.152344 344.710938 M 451.199219 332.964844 C 450.226562 332.964844 449.414062 332.328125 449.414062 331.355469 C 449.414062 330.433594 450.226562 329.75 451.199219 329.75 C 452.144531 329.75 452.9375 330.433594 452.9375 331.355469 C 452.9375 332.347656 452.144531 332.964844 451.199219 332.964844 M 451.152344 340.480469 C 449.898438 340.480469 448.882812 339.621094 448.882812 338.410156 C 448.882812 337.195312 449.898438 336.359375 451.152344 336.359375 C 452.410156 336.359375 453.445312 337.195312 453.445312 338.410156 C 453.445312 339.621094 452.410156 340.480469 451.152344 340.480469 M 485.59375 332.832031 C 485.417969 329.023438 482.75 325.980469 478.695312 325.980469 C 474.445312 325.980469 471.777344 329.023438 471.777344 332.703125 C 471.777344 336.382812 474.179688 339.222656 478.585938 339.269531 L 475.390625 344.445312 L 480.238281 344.445312 L 483.722656 338.628906 C 485.132812 336.316406 485.660156 334.683594 485.59375 332.832031 M 476.140625 332.921875 C 476.140625 331.46875 477.265625 330.367188 478.695312 330.367188 C 480.109375 330.367188 481.230469 331.46875 481.230469 332.921875 C 481.230469 334.332031 480.109375 335.390625 478.695312 335.390625 C 477.265625 335.390625 476.140625 334.332031 476.140625 332.921875 M 506.4375 344.445312 L 510.867188 344.445312 L 510.867188 341.25 L 512.695312 341.25 L 512.695312 337.835938 L 510.867188 337.835938 L 510.867188 326.3125 L 506.746094 326.3125 L 498.683594 337.8125 L 498.683594 341.230469 L 506.4375 341.230469 Z M 502.9375 337.878906 L 506.527344 332.832031 L 506.527344 337.878906 Z M 502.9375 337.878906 "/></svg></div>
+    <h1>My Tunnel</h1>
+    <p class="muted">Accedi alla tua area personale per consultare ruolo, competenze, posizionamento e percorsi di crescita.</p>
+    <form id="loginForm" novalidate>
+      <label for="lgUser">Nome utente</label>
+      <input id="lgUser" type="text" value="m.sannino" autocomplete="off">
+      <label for="lgPass">Password</label>
+      <input id="lgPass" type="password" value="demo-portale" autocomplete="off">
+      <button type="submit" class="btn solid lg">Accedi</button>
+    </form>
+  </div>
+  <div class="login-side">
+    <svg class="tunnel" viewBox="0 0 400 260" aria-hidden="true"><path d="M15 250 A185 185 0 0 1 385 250" fill="none" stroke="#fff" stroke-opacity="0.25" stroke-width="10"/><path d="M50 250 A150 150 0 0 1 350 250" fill="none" stroke="#fff" stroke-opacity="0.34" stroke-width="9"/><path d="M80 250 A120 120 0 0 1 320 250" fill="none" stroke="#fff" stroke-opacity="0.43" stroke-width="8"/><path d="M105 250 A95 95 0 0 1 295 250" fill="none" stroke="#fff" stroke-opacity="0.52" stroke-width="7"/><path d="M126 250 A74 74 0 0 1 274 250" fill="none" stroke="#fff" stroke-opacity="0.61" stroke-width="6"/><path d="M143 250 A57 57 0 0 1 257 250" fill="none" stroke="#fff" stroke-opacity="0.70" stroke-width="5"/><path d="M157 250 A43 43 0 0 1 243 250" fill="none" stroke="#fff" stroke-opacity="0.79" stroke-width="4"/><path d="M168 250 A32 32 0 0 1 232 250" fill="none" stroke="#fff" stroke-opacity="0.88" stroke-width="3"/><line x1="45.0" y1="160.5" x2="34.6" y2="154.5" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="110.5" y1="95.0" x2="104.5" y2="84.6" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="200.0" y1="71.0" x2="200.0" y2="59.0" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="289.5" y1="95.0" x2="295.5" y2="84.6" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="355.0" y1="160.5" x2="365.4" y2="154.5" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="75.3" y1="178.0" x2="64.9" y2="172.0" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="128.0" y1="125.3" x2="122.0" y2="114.9" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="200.0" y1="106.0" x2="200.0" y2="94.0" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="272.0" y1="125.3" x2="278.0" y2="114.9" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="324.7" y1="178.0" x2="335.1" y2="172.0" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="101.3" y1="193.0" x2="90.9" y2="187.0" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="143.0" y1="151.3" x2="137.0" y2="140.9" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="200.0" y1="136.0" x2="200.0" y2="124.0" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="257.0" y1="151.3" x2="263.0" y2="140.9" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="298.7" y1="193.0" x2="309.1" y2="187.0" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="122.9" y1="205.5" x2="112.5" y2="199.5" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="155.5" y1="172.9" x2="149.5" y2="162.5" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="200.0" y1="161.0" x2="200.0" y2="149.0" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="244.5" y1="172.9" x2="250.5" y2="162.5" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><line x1="277.1" y1="205.5" x2="287.5" y2="199.5" stroke="#0B3D6B" stroke-opacity=".35" stroke-width="2"/><path d="M15 250 L194 246 L206 246 L385 250" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="2"/><line x1="0" y1="250" x2="400" y2="250" stroke="#fff" stroke-opacity=".5" stroke-width="2"/></svg>
+    <div class="eyebrow" style="color:rgba(255,255,255,.8)">Portale trasparenza</div>
+    <h2>Tutto sul tuo ruolo, in un unico posto.</h2>
+    <ul>
+      <li>La tua mansione e le tue competenze</li>
+      <li>La tua posizione</li>
+      <li>La tua valutazione e i percorsi di crescita</li>
+    </ul>
+  </div>
+</section>
+<div class="shell" id="shell">
+  <nav class="side" id="nav" aria-label="Sezioni del portale"></nav>
+  <main id="main" tabindex="-1"></main>
+</div>
+
+<script>
+/* ============================================================
+   DATI DEL MODELLO (da SCHEDINA_DEFINITIVO, Punteggio di posizione, fasce definitive)
+   ============================================================ */
+const ROLES = {
+  junior: {
+    key:"junior", name:"Junior Estimator", area:"Impiegati",
+    comps:[
+      {m:"Analisi Economico-Finanziaria e Stima dei Costi", s:"Stima e Analisi dei Costi di Progetto", short:["Stima e analisi","dei costi"],
+       def:"Capacità di analizzare e stimare gli aspetti economici e finanziari di un'offerta o di un'opera, interpretando costi, quantità e dati di mercato per contribuire alla definizione di un prezzo o di un budget competitivo e sostenibile.",
+       desc:"Esecuzione di calcoli e computi metrici e supporto nella raccolta e prima verifica di dati di costo (varianti, discrepanze) a supporto della stima dei costi di gara, sotto supervisione.", c:30, l:2, k:2},
+      {m:"Padronanza di Strumenti Digitali e Piattaforme Tecnologiche", s:"Uso di Strumenti Tecnici di Stima (CAD, Primavera, MS Office/Visio)", short:["Strumenti di stima","(CAD, Primavera, Office)"],
+       def:"Capacità di utilizzare con competenza i software e le piattaforme digitali specifiche della propria funzione (progettazione CAD/BIM, gestione documentale, ERP, strumenti di stima e di project management) a supporto dell'efficacia e della qualità del proprio lavoro.",
+       desc:"Utilizzo di base degli strumenti software di stima e disegno tecnico, sotto supervisione.", c:20, l:2, k:1},
+      {m:"Gestione Documentale", s:"Raccolta e Organizzazione dei Dati Estimativi", short:["Raccolta e organizz.","dati estimativi"],
+       def:"Capacità di raccogliere, organizzare, verificare, archiviare e trasmettere documenti e dati tecnici, economici e amministrativi, assicurandone completezza, tracciabilità e conformità, a supporto del proprio lavoro e di quello del team.",
+       desc:"Raccolta, ordinamento e predisposizione di dati tecnici ed economici necessari alla stima, assicurando completezza, tracciabilità e corretta archiviazione delle informazioni utilizzate dal team Estimating.", c:20, l:3, k:1},
+      {m:"Miglioramento Personale e Autosviluppo", s:"Miglioramento Personale e Autosviluppo", short:["Miglioramento","e autosviluppo"],
+       def:"Capacità di riconoscere le proprie aree di miglioramento e di attivarsi in autonomia per accrescere competenze e conoscenze, anche attraverso feedback, formazione e affiancamento.",
+       desc:"Riconoscimento delle proprie aree di miglioramento nella fase di ingresso nel ruolo e attivazione, con il supporto di Estimator/Senior Estimator, per colmarle attraverso feedback e affiancamento.", c:15, l:3, k:1},
+      {m:"Coordinamento e Collaborazione Interfunzionale", s:"Collaborazione con Team Tecnici", short:["Collaborazione","con team tecnici"],
+       def:"Capacità di coordinare e integrare il contributo di persone e funzioni diverse, favorendo la circolazione delle informazioni, l'allineamento degli obiettivi e la tempestiva risoluzione delle criticità.",
+       desc:"Supporto alla comunicazione e allo scambio di informazioni con i team tecnici e con il procurement durante la preparazione della gara, in affiancamento a Estimator e Senior Estimator.", c:15, l:2, k:1}
+    ],
+    votes:{persone:1, fin:2, info:2, cogn:2, rel:2, aut:2}
+  },
+  estimator: {
+    key:"estimator", name:"Estimator", area:"Impiegati",
+    comps:[
+      {m:"Analisi Economico-Finanziaria e Stima dei Costi", s:"Cost Estimating e Analisi Tecnico-Economica dell'Offerta", short:["Cost estimating","e analisi dell'offerta"],
+       def:"Capacità di analizzare e stimare gli aspetti economici e finanziari di un'offerta o di un'opera, interpretando costi, quantità e dati di mercato per contribuire alla definizione di un prezzo o di un budget competitivo e sostenibile.", desc:"Elaborazione, verifica e coordinamento della stima completa dei costi di una gara: quantità, prezzi unitari, produttività, manodopera, materiali, mezzi, subappalti e costi indiretti.", c:30, l:3, k:2},
+      {m:"Padronanza di Strumenti Digitali e Piattaforme Tecnologiche", s:"Uso di Strumenti Tecnici di Stima (CAD, Primavera, MS Office/Visio)", short:["Strumenti di stima","(CAD, Primavera, Office)"],
+       def:"Capacità di utilizzare con competenza i software e le piattaforme digitali specifiche della propria funzione (progettazione CAD/BIM, gestione documentale, ERP, strumenti di stima e di project management) a supporto dell'efficacia e della qualità del proprio lavoro.", desc:"Padronanza avanzata degli strumenti software di stima e pianificazione.", c:25, l:4, k:1},
+      {m:"Lettura e Interpretazione della Documentazione Tecnica di Progetto", s:"Lettura Elaborati Progettuali ed Estrazione delle Quantità", short:["Lettura elaborati","ed estrazione quantità"],
+       def:"Capacità di leggere, interpretare e utilizzare correttamente disegni, elaborati grafici, capitolati e documentazione tecnica di progetto, individuandone requisiti, quantità e vincoli rilevanti ai fini del proprio lavoro.", desc:"Lettura di disegni, tavole, capitolati e documenti tecnici per individuare le lavorazioni previste ed estrarre correttamente le quantità necessarie alla costruzione della stima.", c:25, l:3, k:1},
+      {m:"Orientamento al Risultato e alla Performance", s:"Affidabilità della Stima e Rispetto delle Deadline", short:["Affidabilità della stima","e rispetto deadline"],
+       def:"Capacità di mantenere qualità, affidabilità e concentrazione nel proprio lavoro fino al raggiungimento dell'obiettivo, nel rispetto delle scadenze anche nelle fasi più intense o sotto pressione.", desc:"Capacità di garantire accuratezza e affidabilità della stima nel rispetto delle deadline, mantenendo la qualità del lavoro anche in gare complesse.", c:10, l:3, k:1},
+      {m:"Coordinamento e Collaborazione Interfunzionale", s:"Coordinamento con Team Tecnici di cantiere e Procurement", short:["Coordinamento con","tecnici e procurement"],
+       def:"Capacità di coordinare e integrare il contributo di persone e funzioni diverse, favorendo la circolazione delle informazioni, l'allineamento degli obiettivi e la tempestiva risoluzione delle criticità.", desc:"Capacità di coordinare funzioni tecniche di cantiere e commerciali, individuando le soluzioni tecniche in corso d'opera, favorendo l'allineamento tra le stime originarie e le esigenze emerse durante l'esecuzione.", c:10, l:3, k:1}
+    ],
+    votes:{persone:2, fin:3, info:2, cogn:3, rel:2, aut:2}
+  },
+  senior: {
+    key:"senior", name:"Senior Estimator", area:"Quadri",
+    comps:[
+      {m:"Analisi Economico-Finanziaria e Stima dei Costi", s:"Stima e Analisi dei Costi su Gare Complesse", desc:"Elaborazione e validazione di stime e computi metrici per gare complesse o di elevato valore economico; gestione autonoma di cost keys e risoluzione di discrepanze di costo.", c:25, l:4, k:2},
+      {m:"Padronanza di Strumenti Digitali e Piattaforme Tecnologiche", s:"Uso di Strumenti Tecnici di Stima (CAD, Primavera, MS Office/Visio)", desc:"Padronanza avanzata degli strumenti software di stima, disegno tecnico e pianificazione.", c:15, l:4, k:1},
+      {m:"Lettura e Interpretazione della Documentazione Tecnica di Progetto", s:"Computi Metrici", desc:"Estrazione e verifica delle quantità dagli elaborati progettuali e dai documenti di gara, strutturando computi metrici e quantity take-off completi, coerenti e tracciabili.", c:20, l:4, k:1},
+      {m:"Coordinamento e Collaborazione Interfunzionale", s:"Coordinamento con Team Tecnici di cantiere e Procurement", desc:"Coordinamento di funzioni tecniche di cantiere e commerciali, favorendo l'allineamento tra le stime originarie e le esigenze emerse durante l'esecuzione.", c:25, l:4, k:1},
+      {m:"Sviluppo dei Collaboratori", s:"Validazione e Affiancamento", desc:"Validazione del lavoro di stima prodotto da Estimator e Junior Estimator, con feedback tecnico-metodologico a supporto della loro crescita professionale.", c:15, l:4, k:1}
+    ],
+    votes:{persone:4, fin:3, info:3, cogn:4, rel:3, aut:3}
+  },
+  manager: {
+    key:"manager", name:"Estimating Manager Italy", area:"Dirigenti",
+    comps:[
+      {m:"Analisi Economico-Finanziaria e Stima dei Costi", s:"Supervisione e Validazione Finale delle Stime", desc:"Supervisione e validazione finale delle stime e dei computi metrici del team; definizione della strategia tecnico-economica di offerta insieme alla Direzione.", c:25, l:5, k:2},
+      {m:"Risk Management", s:"Validazione Finale del Rischio e dei Piani di Contingency", desc:"Validazione finale della valutazione dei rischi e dei piani di contingency elaborati dal team di estimating, prima della sottomissione dell'offerta.", c:15, l:5, k:2},
+      {m:"Leadership e Gestione dei Team", s:"Leadership Integrata e Gestione del Team", desc:"Guida del team di estimating di sede e di cantiere.", c:20, l:5, k:1},
+      {m:"Problem Solving e Decision Making", s:"Risoluzione delle Criticità più Complesse del Team", desc:"Risoluzione delle criticità più complesse emerse dal lavoro del team di estimating.", c:25, l:5, k:1},
+      {m:"Value Engineering e Ottimizzazione Tecnico-Economica", s:"Cost Planning, Benchmarking e Ottimizzazione dell'Offerta", desc:"Strutturazione e confronto delle stime con dati storici, benchmark, costi unitari e scenari alternativi, incluse valutazioni make-or-buy.", c:15, l:4, k:2}
+    ],
+    votes:{persone:5, fin:4, info:5, cogn:5, rel:5, aut:5}
+  }
+};
+const PATH = ["junior","estimator","senior","manager"];
+
+/* Dipendente di esempio: livelli raggiunti e autovalutazione (simulati) */
+const EMP = {
+  name:"Mario Sannino", role:"junior", since:"ottobre 2025",
+  unit:"Corporate Operations Italy › Estimating",
+  team:"Estimating", contract:"Tempo indeterminato · full time",
+  achieved:[1,2,3,4,2],
+  self:[2,2,3,4,3],
+  notes:[
+    "I computi metrici richiedono ancora molte correzioni e le discrepanze di costo non vengono individuate da solo. È la competenza con più peso e l'unica core: questo scarto incide molto sul punteggio e va affrontato con affiancamento e formazione tecnica.",
+    "Usa i software di base come richiesto dal ruolo.",
+    "Archivio dati completo e tracciabile, in linea con quanto atteso.",
+    "Chiede feedback in modo spontaneo e si attiva da solo per colmare le lacune. È un punto di forza su cui fare leva per recuperare sulla stima dei costi.",
+    "Scambia informazioni con tecnici e procurement in affiancamento, come previsto."
+  ],
+  managerComment:"Mario usa i software di stima come richiesto dal ruolo, tiene un archivio dei dati completo e tracciabile e scambia informazioni con tecnici e procurement come previsto. Il suo punto di forza è l'atteggiamento: chiede feedback in modo spontaneo e si attiva da solo per colmare le lacune. L'area da migliorare è la stima dei costi: i computi metrici richiedono ancora molte correzioni e le discrepanze di costo non vengono individuate da solo. È la competenza che pesa di più nel ruolo e va affrontata con affiancamento e formazione tecnica.",
+  selfComment:"Sento di aver fatto progressi sugli strumenti e sull'archivio. Vorrei più occasioni per lavorare sui computi con qualcuno che mi corregga in tempo reale."
+};
+
+/* Fasce definitive */
+const BAND_PROF = {"1": {"t": "Posizioni che applicano competenze di base entro attività già definite, il cui esito è verificato da altri. Responsabilità e autonomia limitate, impegno contenuto.", "pts": ["Applichi competenze di base su attività già definite.", "Il risultato del tuo lavoro viene verificato da altri.", "Responsabilità e autonomia sono limitate."]}, "2": {"t": "Posizioni che svolgono autonomamente attività ricorrenti e ne rispondono. Responsabilità circoscritta a quanto viene loro affidato, autonomia entro procedure stabilite, impegno di attenzione costante.", "pts": ["Svolgi da solo attività che si ripetono e ne rispondi.", "Rispondi di ciò che ti viene affidato, non di persone o budget.", "Decidi in autonomia, ma seguendo procedure già stabilite.", "Il ruolo richiede attenzione costante."]}, "3": {"t": "Posizioni che esercitano una competenza riconoscibile su una casistica definita, con responsabilità limitate e autonomia entro indicazioni date. Impegno prevalentemente di concentrazione.", "pts": ["Hai una competenza tecnica riconoscibile su casi definiti.", "Responsabilità limitate.", "Autonomia entro le indicazioni ricevute."]}, "4": {"t": "Posizioni che padroneggiano il proprio ambito, comprese le situazioni non previste, con responsabilità circoscritte e autonomia operativa. Impegno frequente su attività complesse.", "pts": ["Padroneggi il tuo ambito, anche nei casi non previsti.", "Autonomia operativa.", "Lavori spesso su attività complesse."]}, "5": {"t": "Posizioni che presidiano un'attività o un processo o le risorse che vi sono destinate, con competenze esperte, autonomia entro direttive generali e impegno elevato.", "pts": ["Presidi un'attività, un processo o le sue risorse.", "Competenze esperte.", "Autonomia entro direttive generali."]}, "6": {"t": "Posizioni che rispondono di una struttura e dei suoi risultati, con competenze esperte, responsabilità su persone e mezzi, autonomia direttiva e significativa esposizione. È la fascia da cui può partire una candidatura alla dirigenza.", "pts": ["Rispondi di una struttura e dei suoi risultati.", "Responsabilità su persone e mezzi.", "Da qui può partire una candidatura alla dirigenza."]}, "7": {"t": "Posizioni di direzione, con deleghe formali, che rispondono dei risultati di una o più strutture e concorrono agli indirizzi dell'azienda. All'interno della fascia le posizioni si articolano in tre Band (C, B, A) secondo il punteggio dirigenziale.", "pts": ["Dirigi una o più strutture con deleghe formali.", "Contribuisci agli indirizzi dell'azienda.", "Si accede solo con la procedura di nomina GH.ITA.HR.PCD.01."]}};
+const BANDS = [
+  {n:1, name:"Supporto esecutivo", from:17.5, to:30, area:"Impiegati"},
+  {n:2, name:"Esecuzione autonoma", from:30, to:40, area:"Impiegati"},
+  {n:3, name:"Contributo tecnico", from:40, to:50, area:"Impiegati"},
+  {n:4, name:"Contributo specialistico", from:50, to:60, area:"Impiegati"},
+  {n:5, name:"Presidio di attività", from:60, to:70, area:"Quadri"},
+  {n:6, name:"Responsabilità di struttura", from:70, to:80, area:"Quadri"},
+  {n:7, name:"Dirigenza", from:80, to:100, area:"Dirigenti", note:"Band A · B · C con punteggio dirigenziale"}
+];
+
+/* Scala dei livelli di padronanza (criterio: grado di autonomia) */
+const SCALE = [
+  {n:1, nm:"Base", p:"Lavora con guida costante."},
+  {n:2, nm:"In sviluppo", p:"Attività semplici, sotto supervisione."},
+  {n:3, nm:"Autonomo", p:"Gestisce da solo le attività ordinarie."},
+  {n:4, nm:"Avanzato", p:"Gestisce casi complessi. Riferimento per i colleghi."},
+  {n:5, nm:"Esperto", p:"Definisce metodi e standard. Forma gli altri."}
+];
+
+/* Catalogo formativo (esempio, fittizio) per competenza madre */
+const CATALOG = {
+  "Analisi Economico-Finanziaria e Stima dei Costi":[
+    {id:"c1", t:"Computi metrici e quantity take-off: i fondamenti", f:"Aula", d:"48 ore", lv:"porta al livello 2"},
+    {id:"c2", t:"Analisi prezzi, cost keys e produttività", f:"Online + esercitazione", d:"36 ore", lv:"porta al livello 3"},
+    {id:"c4", t:"Individuare e risolvere le discrepanze di costo: casi pratici", f:"Workshop", d:"24 ore", lv:"porta al livello 2"}
+  ],
+  "Padronanza di Strumenti Digitali e Piattaforme Tecnologiche":[
+    {id:"d1", t:"Primavera P6 per la stima: livello intermedio", f:"Online", d:"32 ore", lv:"porta al livello 3"},
+    {id:"d2", t:"Lettura quantità da modelli CAD/BIM", f:"Aula", d:"24 ore", lv:"porta al livello 4"}
+  ],
+  "Gestione Documentale":[
+    {id:"g1", t:"Archivio di gara su SharePoint: standard e tracciabilità", f:"Online", d:"12 ore", lv:"consolida il livello"}
+  ],
+  "Miglioramento Personale e Autosviluppo":[
+    {id:"m1", t:"Il mio piano di sviluppo individuale", f:"Workshop", d:"12 ore", lv:"consolida il livello"}
+  ],
+  "Coordinamento e Collaborazione Interfunzionale":[
+    {id:"k1", t:"Lavorare con procurement e uffici tecnici in fase di gara", f:"Aula", d:"24 ore", lv:"porta al livello 3"},
+    {id:"k2", t:"Gestire il passaggio stima-esecuzione con il cantiere", f:"Affiancamento", d:"2 mesi", lv:"porta al livello 4"}
+  ],
+  "Lettura e Interpretazione della Documentazione Tecnica di Progetto":[
+    {id:"l1", t:"Leggere elaborati, tavole e capitolati di gara", f:"Aula", d:"36 ore", lv:"porta al livello 3"},
+    {id:"l2", t:"Quantity take-off su opere in sotterraneo", f:"Aula + cantiere", d:"48 ore", lv:"porta al livello 4"}
+  ],
+  "Orientamento al Risultato e alla Performance":[
+    {id:"o1", t:"Priorità e scadenze nelle gare complesse", f:"Workshop", d:"16 ore", lv:"porta al livello 3"}
+  ],
+  "Sviluppo dei Collaboratori":[
+    {id:"s1", t:"Fare da tutor: feedback tecnico e affiancamento", f:"Workshop", d:"24 ore", lv:"porta al livello 4"}
+  ],
+  "Risk Management":[
+    {id:"r1", t:"Risk assessment e piani di contingency in offerta", f:"Aula", d:"48 ore", lv:"porta al livello 4"}
+  ],
+  "Leadership e Gestione dei Team":[
+    {id:"h1", t:"Percorso Leadership per nuovi responsabili", f:"Percorso", d:"6 mesi", lv:"porta al livello 4"}
+  ],
+  "Problem Solving e Decision Making":[
+    {id:"p1", t:"Decidere sotto pressione: casi di gara", f:"Workshop", d:"24 ore", lv:"porta al livello 4"}
+  ],
+  "Value Engineering e Ottimizzazione Tecnico-Economica":[
+    {id:"v1", t:"Value engineering e benchmarking dei costi", f:"Aula", d:"48 ore", lv:"porta al livello 4"}
+  ]
+};
+
+/* Obiettivi di performance (simulati) */
+const GOALS = [
+  {t:"Supportare la stima delle gare del team", kpi:"Gare supportate", target:"8 gare", res:"9 gare", peso:40, pct:100},
+  {t:"Completare l'archivio dati estimativi delle gare 2026", kpi:"Gare archiviate con dati completi", target:"100%", res:"100%", peso:30, pct:100},
+  {t:"Completare il corso Primavera P6 base", kpi:"Corso concluso con test finale", target:"Entro giugno", res:"Concluso a maggio", peso:30, pct:100}
+];
+
+/* ============================================================
+   CALCOLI
+   ============================================================ */
+const fmt = (n,d=2)=> Number(n).toLocaleString("it-IT",{minimumFractionDigits:0,maximumFractionDigits:d});
+const compScore = (comps, levels)=> comps.reduce((s,c,i)=> s + c.c * (levels ? levels[i] : c.l) * c.k, 0);
+const avg = a => a.reduce((s,x)=>s+x,0)/a.length;
+function position(role){
+  const v=role.votes, cs=compScore(role.comps);
+  const crit = {
+    comp: cs/1000*100,
+    imp: avg([v.persone,v.fin,v.info])/5*100,
+    req: avg([v.cogn,v.rel])/5*100,
+    aut: v.aut/5*100
+  };
+  const score = avg([crit.comp,crit.imp,crit.req,crit.aut]);
+  return {cs, crit, score, band: bandOf(score)};
+}
+function bandOf(s){ return BANDS.find(b=> s>=b.from && (s<b.to || b.n===7)) || BANDS[0]; }
+const ME = ROLES[EMP.role];
+const MEPOS = position(ME);
+
+/* ============================================================
+   ICONE E NAVIGAZIONE
+   ============================================================ */
+const IC = {
+  profilo:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>',
+  mansioni:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+  competenze:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/>',
+  punteggio:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  valutazione:'<path d="M12 3l9 6.5-3.5 10.5h-11L3 9.5z"/><path d="M12 8l4 3-1.5 4.5h-5L8 11z"/>',
+  formazione:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5"/>',
+  carriera:'<path d="M4 20l6-6 4 4 7-9"/><path d="M15 9h6v6"/>',
+  ruolo:'<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
+  direzione:'<rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M6 16v-2h12v2"/>',
+  contratto:'<path d="M15 4l5 5L9 20H4v-5z"/><path d="M13 6l5 5"/><path d="M14 21h7"/>'
+};
+const SECTIONS = [
+  {id:"profilo", nm:"Il mio profilo", d:"Il riepilogo della tua posizione: ruolo, inquadramento, punteggio e fascia."},
+  {id:"mansioni", nm:"Le mie mansioni", d:"Cosa fa il tuo ruolo, in sintesi."},
+  {id:"competenze", nm:"Competenze del ruolo", d:"Le competenze richieste, il loro peso e il livello atteso."},
+  {id:"ruolo", nm:"Criteri di posizionamento", d:"Impatto organizzativo, carico cognitivo-relazionale e autonomia decisionale della tua posizione."},
+  {id:"punteggio", nm:"Posizionamento", d:"Come si calcola il punteggio di posizione e in quale fascia ti colloca."},
+  {id:"valutazione", nm:"Valutazione", d:"Livello atteso e livello raggiunto nelle competenze del ruolo."},
+  {id:"formazione", nm:"Formazione", d:"Percorsi suggeriti a partire dalle competenze sotto soglia."},
+  {id:"carriera", nm:"Crescita e carriera", d:"Cosa serve per il livello successivo e come arrivarci."},
+  {id:"direzione", nm:"La tua area Corporate", d:"Tutti i ruoli di Corporate Operations Italy, con la loro fascia."},
+  {id:"contratto", nm:"Contratto e CCNL", d:"Il tuo contratto e il CCNL Edilizia Industria."}
+];
+const icon = id => `<svg viewBox="0 0 24 24" aria-hidden="true">${IC[id]}</svg>`;
+
+const state = { sec:"profilo", evalTab:"comp", target:"estimator", plan:new Set() };
+try{ localStorage.removeItem("fg-plan"); }catch(e){}
+function savePlan(){}
+
+function renderNav(){
+  document.getElementById("nav").innerHTML =
+    `<div class="eyebrow navlabel">Sezioni</div>` +
+    SECTIONS.map(s=>`<button type="button" data-go="${s.id}" aria-current="${s.id===state.sec}">${icon(s.id)}${s.nm}</button>`).join("") ;
+}
+
+/* ============================================================
+   SPIDER CHART
+   ============================================================ */
+function radar(labels, series, opt={}){
+  const W=opt.W||600,H=450,cx=W/2,cy=H/2+6,R=145,n=labels.length;
+  const ang=i=> (-90 + i*360/n) * Math.PI/180;
+  const pt=(i,v)=> [cx + Math.cos(ang(i))*R*v/5, cy + Math.sin(ang(i))*R*v/5];
+  let g="";
+  for(let r=1;r<=5;r++){
+    const pts=labels.map((_,i)=>pt(i,r).join(",")).join(" ");
+    g+=`<polygon points="${pts}" fill="none" stroke="var(--line)" stroke-width="1"/>`;
+    const [x,y]=pt(0,r); g+=`<text x="${x+6}" y="${y+4}" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">${r}</text>`;
+  }
+  labels.forEach((_,i)=>{const [x,y]=pt(i,5); g+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--line)"/>`;});
+  series.forEach(s=>{
+    const pts=s.values.map((v,i)=>pt(i,v).join(",")).join(" ");
+    g+=`<polygon points="${pts}" fill="${s.fill||'none'}" stroke="${s.stroke}" stroke-width="${s.w||2.5}" ${s.dash?`stroke-dasharray="${s.dash}"`:''} stroke-linejoin="round"/>`;
+    if(s.dots) s.values.forEach((v,i)=>{const [x,y]=pt(i,v); const col = s.dotColor? s.dotColor(i,v) : s.stroke;
+      g+=`<circle cx="${x}" cy="${y}" r="${s.r||6}" fill="${s.hollow?'var(--surface)':col}" stroke="${s.hollow?s.stroke:'var(--surface)'}" stroke-width="2"/>`;});
+  });
+  labels.forEach((lb,i)=>{
+    const a=ang(i), x=cx+Math.cos(a)*(R+22), y=cy+Math.sin(a)*(R+22);
+    const anchor = Math.abs(Math.cos(a))<0.2 ? "middle" : (Math.cos(a)>0?"start":"end");
+    const dy = Math.sin(a)< -0.5 ? -18 : (Math.sin(a)>0.5? 12 : -4);
+    g+=`<text x="${x}" y="${y+dy}" text-anchor="${anchor}" font-family="IBM Plex Sans, sans-serif" fill="var(--ink)"><tspan font-size="13" font-weight="600">${lb[0]}</tspan><tspan x="${x}" dy="16" font-size="11.5" fill="var(--muted)">${lb[1]||""}</tspan></text>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${opt.aria||'Grafico radar delle competenze'}">${g}</svg>`;
+}
+
+/* ============================================================
+   SEZIONI
+   ============================================================ */
+const head = (tag,title,lead)=>`<div class="sec-head">${title?`<h1>${title}</h1>`:""}${lead?`<p class="lead">${lead}</p>`:""}</div>`;
+const dots = (l,g) => `<span class="dots" aria-label="livello ${l} su 5">${[1,2,3,4,5].map(i=>`<i class="${i<=l?(g?'on g':'on'):''}"></i>`).join("")}</span>`;
+const gapPill = d => d<0?`<span class="pill bad">${d} sotto</span>`: d>0?`<span class="pill ok">+${d} sopra</span>`:`<span class="pill eq">in linea</span>`;
+
+function secProfilo(){
+  const p=MEPOS, ach=compScore(ME.comps,EMP.achieved), exp=p.cs;
+  const below=ME.comps.filter((c,i)=>EMP.achieved[i]<c.l).length;
+  const cards=SECTIONS.filter(s=>s.id!=="profilo").map(s=>`
+    <button type="button" class="jump" data-go="${s.id}"><span class="t">${icon(s.id)}${s.nm}</span><span class="d">${s.d}</span><span class="go">Apri →</span></button>`).join("");
+  return `
+  ${head("Il mio profilo","Ciao Mario, questa è la tua posizione in Ghella","Tutto sul tuo ruolo, in un unico posto.")}
+  <div class="stack">
+    <section class="hero" aria-label="Dati della posizione">
+      <div class="hero-top">
+        <div class="avatar" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></div>
+        <div style="min-width:0;flex:1">
+          <div class="eyebrow">${EMP.unit}</div>
+          <h2 style="font-size:1.5rem;margin-top:4px">${ME.name}</h2>
+          <p class="muted">${EMP.name} · in ruolo da un anno</p>
+        </div>
+      </div>
+      <div class="hero-meta">
+        <div><div class="eyebrow">Team</div><div class="val">${EMP.team}</div></div>
+        <div><div class="eyebrow">Contratto</div><div class="val">${EMP.contract}</div></div>
+        <div><div class="eyebrow">Contratto collettivo</div><div class="val">CCNL Edilizia Industria</div></div>
+        <div><div class="eyebrow">Ultima valutazione</div><div class="val">2026 · chiusa</div></div>
+      </div>
+    </section>
+    <div>
+      <h2 style="margin:8px 0 12px">Esplora le sezioni</h2>
+      <div class="grid g3">${cards}</div>
+    </div>
+  </div>`;
+}
+
+function secMansioni(){
+  const acts=[
+    "Esegue calcoli e <b>computi metrici</b> sugli elaborati di progetto.",
+    "Fa una prima <b>verifica dei dati di costo</b> e segnala varianti e discrepanze.",
+    "Aggiorna <b>cost keys e listini prezzi</b>.",
+    "Raccoglie e <b>archivia i dati di gara</b> in modo completo e tracciabile.",
+    "Collabora con <b>team tecnici e procurement</b> durante la gara."
+  ];
+  return `
+  ${head("Le mie mansioni","Cosa fa un Junior Estimator","")}
+  <div class="stack mans">
+    <div class="card mscope">
+      <div class="eyebrow" style="margin-bottom:6px">Scopo del ruolo</div>
+      <p style="font-size:1.08rem;max-width:72ch">Supporta il team Estimating nella stima dei costi di gare e progetti, sotto la supervisione di Estimator e Senior Estimator.</p>
+    </div>
+    <div class="card">
+      <h3>Attività principali</h3>
+      <ol class="macts">${acts.map((x,i)=>`<li><span class="mn" aria-hidden="true"></span><span>${x}</span></li>`).join("")}</ol>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <h3>Dove si colloca</h3>
+        <dl class="kv">
+          <dt>Team</dt><dd>Estimating</dd>
+          <dt>Riporta a</dt><dd>Line Manager Estimating</dd>
+          <dt>Lavora con</dt><dd>Estimator, Senior Estimator</dd>
+        </dl>
+      </div>
+      <div class="card">
+        <h3>Requisiti</h3>
+        <dl class="kv">
+          <dt>Formazione</dt><dd>Laurea in Ingegneria Civile o affine</dd>
+          <dt>Strumenti</dt><dd>MS Office, CAD, Primavera</dd>
+          <dt>Lingue</dt><dd>Inglese fluente</dd>
+        </dl>
+      </div>
+    </div>
+  </div>`;
+}
+
+const DICT={core:["Progettazione Tecnica e Ingegneristica", "Monitoraggio Economico-Finanziario della Commessa", "Analisi Economico-Finanziaria e Stima dei Costi", "Gestione del Processo di Gara (Tender Management)", "Risk Management", "Conformità Normativa e Gestione del Rischio Regolatorio (Compliance)", "Value Engineering e Ottimizzazione Tecnico-Economica", "Gestione Fornitori e Procurement", "Coordinamento della Commessa", "Coordinamento Tecnico delle Strutture Operative", "Controllo Qualità e Collaudo"],supp:["Gestione Contrattuale e Amministrazione dei Contratti (Contract Administration)", "Padronanza di Strumenti Digitali e Piattaforme Tecnologiche", "Analisi Dati e Monitoraggio KPI (Data & KPI Monitoring)", "Pianificazione e Organizzazione dei Processi", "Gestione Documentale", "Lettura e Interpretazione della Documentazione Tecnica di Progetto", "Redazione e Standardizzazione Tecnica", "Sviluppo dei Collaboratori", "Orientamento al Risultato e alla Performance", "Miglioramento Personale e Autosviluppo", "Coordinamento e Collaborazione Interfunzionale", "Leadership e Gestione dei Team", "Problem Solving e Decision Making", "Pensiero Strategico", "Influencing & Networking", "Precisione e Attenzione al Dettaglio"]};
+function secCompetenze(){
+  const p=MEPOS, ach=compScore(ME.comps,EMP.achieved), exp=p.cs;
+  const below=ME.comps.filter((c,i)=>EMP.achieved[i]<c.l).length;
+  const rows = ME.comps.map((c,i)=>`
+    <details class="comp">
+      <summary>
+        <div style="min-width:0"><div class="nm">${c.s}</div><div class="mother">Dal dizionario: ${c.m}</div></div>
+        <div class="facts">
+          <div class="fact"><b>${c.c}%</b><span>Centralità</span></div>
+          <div class="fact"><b style="align-items:center;gap:8px">${dots(c.l)}<span style="display:inline;font:inherit;text-transform:none;letter-spacing:0;color:var(--ink);margin:0">${c.l}</span></b><span>Livello atteso</span></div>
+          <div class="fact"><b style="flex-direction:column;align-items:flex-end;line-height:1.25">${c.k===2?'Core':'Di supporto'}<small style="font-weight:500;font-size:.78rem;color:var(--muted)">× ${c.k}</small></b><span>Tipo</span></div>
+          <div class="fact"><b>${c.c*c.l*c.k}</b><span>Punti</span></div>
+          <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+      </summary>
+      <div class="body">
+        <div><div class="bl">Cosa significa in generale</div><p>${c.def}</p></div>
+        <div><div class="bl">Cosa significa per il tuo ruolo</div><p>${c.desc}</p>
+          <p class="muted small" style="margin-top:10px">Livello atteso ${c.l} · ${SCALE[c.l-1].nm}: ${SCALE[c.l-1].p}</p></div>
+      </div>
+    </details>`).join("");
+  return `
+  ${head("Competenze del ruolo","Le competenze richieste","")}
+  <div class="stack">
+    <div class="card dict">
+      <h2>Il dizionario delle competenze</h2>
+      <p class="muted" style="margin-top:6px;max-width:75ch">Un unico dizionario, uguale per tutti i ruoli dell'azienda.</p>
+      <div class="dsteps">
+        <div class="dstep"><span class="dn">1</span><div><b>Un solo dizionario</b><p>Competenze trasversali, valide per tutta l'organizzazione.</p></div></div>
+        <div class="dstep"><span class="dn">2</span><div><b>Core o di supporto</b><p>Ogni competenza è classificata una sola volta: <b>core</b> se incide direttamente sul business, <b>di supporto</b> se lo fa in modo indiretto.</p></div></div>
+        <div class="dstep"><span class="dn">3</span><div><b>Declinata sul tuo ruolo</b><p>Per ogni competenza trovi la definizione generale e cosa ci si aspetta da te.</p></div></div>
+      </div>
+      <details class="lvscale"><summary><span>Vedi il dizionario completo</span><span class="chev">＋</span></summary>
+        ${(()=>{const M=new Set(ME.comps.map(c=>c.m));const row=(x,t)=>`<tr class="${M.has(x)?'mine':''}"><td>${x}</td><td><span class="dtag ${t==='Core'?'core':''}">${t}</span></td><td class="ck">${M.has(x)?'✓':''}</td></tr>`;
+          return `<div class="tbl-wrap"><table class="dtable"><thead><tr><th>Competenza</th><th>Classificazione</th><th>Nel tuo ruolo</th></tr></thead><tbody>${DICT.core.map(x=>row(x,'Core')).join("")}${DICT.supp.map(x=>row(x,'Di supporto')).join("")}</tbody></table></div>`})()}
+      </details>
+    </div>
+    <div><h2 style="margin-top:6px">Le 5 competenze del tuo ruolo</h2><p class="muted" style="margin-top:4px;max-width:75ch">Per ogni competenza trovi quanto pesa nel ruolo (centralità), il livello di padronanza atteso e se è una competenza chiave per l'azienda.</p></div>
+    <div class="complist"><div class="comp-hd"><span>Competenza</span><div class="facts"><span>Centralità</span><span>Livello atteso</span><span>Tipo</span><span>Punti</span><span></span></div></div>${rows}</div>
+    <div class="stack" style="margin-top:-46px">
+      <details class="lvscale">
+        <summary><span>Come si legge la tabella</span><span class="chev">＋</span></summary>
+        <div class="card" style="margin-top:10px">
+        <dl class="kv">
+          <dt style="font-weight:700;color:var(--ink)">Centralità</dt><dd style="font-weight:400">Quanto pesa la competenza nel tuo ruolo. Il totale fa sempre 100%.</dd>
+          <dt style="font-weight:700;color:var(--ink)">Livello atteso</dt><dd style="font-weight:400">La padronanza richiesta dal ruolo sulla competenza, da 1 (base) a 5 (esperto).
+            <details class="lvscale"><summary><span>La scala dei livelli di padronanza</span><span class="chev">＋</span></summary>
+              <div style="height:12px"></div>
+              <div class="scale">${SCALE.map(s=>`<div><b>${s.n}</b><span class="nm">${s.nm}</span><p>${s.p}</p></div>`).join("")}</div>
+            </details></dd>
+          <dt style="font-weight:700;color:var(--ink)">Core / Supporto</dt><dd style="font-weight:400">Le competenze <b>core</b> sono quelle chiave per il business dell'azienda e valgono doppio; quelle <b>di supporto</b> valgono una volta.</dd>
+          <dt style="font-weight:700;color:var(--ink)">Punti</dt><dd style="font-weight:400">Il valore della competenza nel tuo ruolo. Si ottiene <b>moltiplicando i tre elementi precedenti</b>.</dd>
+        </dl>
+        <div class="info" style="margin-top:14px">Esempio: <b>Stima e Analisi dei Costi di Progetto</b> ha centralità 30%, livello atteso 2 ed è core (vale doppio). I punti sono quindi 30 × 2 × 2 = <b>120</b>.</div>
+        </div>
+      </details>
+      <div class="card" style="background:var(--blue-soft);border-color:transparent">
+        <div class="eyebrow">Competence score del ruolo</div>
+        <div class="big-score" style="margin-top:8px"><span class="v">${MEPOS.cs}</span><span class="muted">su 1000</span></div>
+        <p style="margin-top:10px;font-size:1.1rem;line-height:1.5">È la somma dei punti di tutte le competenze del ruolo. Vale un quarto del punteggio di posizione: ${MEPOS.cs} su 1000 diventa <b>${fmt(MEPOS.crit.comp)}%</b>.</p>
+        <div class="row" style="margin-top:14px;gap:10px;flex-wrap:wrap"><button type="button" class="btn" data-go="punteggio">Vedi il punteggio di posizione →</button><button type="button" class="btn solid" data-go="ruolo">Altri criteri per la valutazione del posizionamento →</button></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function trackHTML(score, marks){
+  const span=100-17.5, x=v=> ((v-17.5)/span*100);
+  const cols=["#D3E3F3","#AFCBE8","#86AFDA","#5B92CB","#3277BA","#0060A6","#00427A"];
+  const segs=BANDS.map((b,i)=>`<div class="seg" style="left:${x(b.from)}%;width:${x(b.to)-x(b.from)}%;background:${cols[i]};${i===0?'border-radius:6px 0 0 6px;':''}${i===6?'border-radius:0 6px 6px 0;border-right:0;':''}"></div>`).join("");
+  const mk=(marks||[{v:score,l:fmt(score)}]).map(m=>`<div class="mk ${m.side||''}" style="left:${x(m.v)}%"><b ${m.c?`style="background:${m.c}"`:''}>${m.l}</b><i ${m.c?`style="background:${m.c}"`:''}></i></div>`).join("");
+  const axis=[17.5,30,40,50,60,70,80,100].map(v=>`<span style="left:${x(v)}%">${fmt(v,1)}</span>`).join("");
+  return `<div class="track">${segs}${mk}</div><div class="track-axis">${axis}</div>`;
+}
+
+/* Scale dei criteri (documento di job grading) */
+const SCALES={
+  persone:{nm:"Responsabilità sulle persone",def:"La responsabilità nel guidare, coordinare e far crescere altre persone.",lv:[
+    ["Nessuna responsabilità sulle persone","La posizione non richiede responsabilità verso altre persone."],
+    ["Responsabilità limitata","Fornisce supporto, guida o consulenza a singole persone o piccoli team."],
+    ["Responsabilità moderata","Supervisiona o coordina il lavoro di altri, con poteri decisionali limitati."],
+    ["Responsabilità elevata","Guida direttamente un team: assegna compiti e obiettivi, valuta le prestazioni e risponde dei risultati."],
+    ["Piena responsabilità","Guida una struttura composta da più team, anche con altri responsabili, e ne risponde nel complesso."]]},
+  fin:{nm:"Responsabilità sulle risorse finanziarie",def:"La responsabilità su importi, budget, dati economici e decisioni di spesa.",lv:[
+    ["Nessuna responsabilità finanziaria","La posizione non gestisce risorse finanziarie."],
+    ["Responsabilità limitata","Gestisce aspetti economici circoscritti, come computi, ordini e giustificativi di spesa."],
+    ["Responsabilità moderata","Gestisce risorse significative, supervisiona le spese e partecipa alle decisioni finanziarie."],
+    ["Responsabilità considerevole","Gestisce budget ampi e decide le allocazioni per un dipartimento o per l'organizzazione."],
+    ["Piena responsabilità","Pianifica e supervisiona le finanze dell'intera organizzazione."]]},
+  info:{nm:"Visione strategica delle informazioni",def:"Come la posizione usa e interpreta le informazioni per contribuire alle decisioni.",lv:[
+    ["Visione di base","Usa informazioni e dati per svolgere le proprie attività."],
+    ["Visione moderata","Interpreta informazioni e dati per proporre miglioramenti e supportare decisioni operative."],
+    ["Visione significativa","Integra informazioni di fonti diverse e contribuisce a decisioni gestionali."],
+    ["Visione elevata","Elabora analisi complesse che orientano processi, funzioni o aree."],
+    ["Visione d'impresa","Contribuisce a definire priorità e decisioni strategiche dell'azienda."]]},
+  cogn:{nm:"Carico cognitivo",def:"Lo sforzo mentale richiesto: concentrazione, analisi, complessità dei problemi.",lv:[
+    ["Carico di base","Attenzione nell'applicare procedure e criteri già definiti."],
+    ["Carico moderato","Analisi di informazioni e soluzioni per situazioni ricorrenti, con precisione e attenzione al dettaglio."],
+    ["Carico significativo","Interpretazione di informazioni diverse e valutazione di alternative con giudizio professionale."],
+    ["Carico elevato","Gestione di informazioni complesse e di molte variabili in contesti non standard."],
+    ["Carico strategico","Visione d'insieme, scenari complessi e problemi ad alto impatto."]]},
+  rel:{nm:"Carico relazionale ed emotivo",def:"L'impegno richiesto nel gestire relazioni con colleghi e interlocutori interni ed esterni.",lv:[
+    ["Carico di base","Relazioni circoscritte e interazioni prevalentemente strutturate."],
+    ["Carico moderato","Interazioni frequenti con diversi interlocutori, adattando il modo di comunicare."],
+    ["Carico significativo","Gestione continua di relazioni diverse, favorendo collaborazione e allineamento."],
+    ["Carico elevato","Relazioni articolate con molti interlocutori per raggiungere obiettivi condivisi."],
+    ["Carico strategico","Relazioni di grande rilievo per l'azienda, capaci di influenzare decisioni e risultati."]]},
+  aut:{nm:"Autonomia decisionale",def:"Quanto la posizione decide da sola e su che cosa viene verificato il suo lavoro.",lv:[
+    ["Esecuzione su istruzioni","Lavora su istruzioni dettagliate; il lavoro è verificato mentre viene svolto."],
+    ["Scelta entro procedure","Sceglie tra soluzioni già previste dalle procedure e rimanda i casi particolari a chi coordina; il lavoro è verificato sui risultati intermedi."],
+    ["Discrezionalità tecnica","Lavora su direttive generali e definisce le soluzioni tecniche del proprio ambito; la verifica riguarda il risultato."],
+    ["Autonomia sugli obiettivi","Riceve obiettivi e vincoli e decide priorità, modalità e risorse per raggiungerli."],
+    ["Autonomia di indirizzo","Opera con ampia delega e contribuisce a definire gli obiettivi della propria area."]]}
+};
+const CRITERIA=[
+  {nm:"Impatto organizzativo", q:"Di che cosa risponde la tua posizione.", keys:["persone","fin","info"], pk:"imp"},
+  {nm:"Richiesta cognitivo-relazionale", q:"Quanto impegno mentale e relazionale richiede il tuo ruolo.", keys:["cogn","rel"], pk:"req"},
+  {nm:"Autonomia decisionale", q:"Entro quali margini la tua posizione decide.", keys:["aut"], pk:"aut"}
+];
+function secRuolo(){
+  const v=ME.votes, p=MEPOS;
+  const sub=k=>{const sc=SCALES[k], n=v[k], L=sc.lv[n-1];
+    return `<div class="sub">
+      <div class="sub-h"><div style="min-width:0"><div class="nm">${sc.nm}</div><div class="muted small">${sc.def}</div></div>
+        <div class="vote">${dots(n)}<b class="mono">${n}</b><span class="muted small">su 5</span></div></div>
+      <details class="allv"><summary><span class="lvtxt"><b>Livello ${n} · ${L[0]}.</b> ${L[1]}</span> <span class="lvlink">Vedi tutti i livelli</span></summary><ol>${sc.lv.map((x,i)=>`<li class="${i+1===n?'me':''}"><b>${i+1} · ${x[0]}.</b> ${x[1]}</li>`).join("")}</ol></details>
+    </div>`;};
+  return `
+  ${head("Criteri di posizionamento","Impatto organizzativo, carico cognitivo-relazionale e autonomia decisionale","Oltre alle competenze, il ruolo è valutato su tre criteri: impatto organizzativo, carico cognitivo-relazionale e autonomia decisionale.")}
+  <div class="stack">
+    <div class="card calc">
+      <div class="calc-t">Come si calcola il punteggio di un criterio</div>
+      <div class="calc-steps">
+        <div><b>1</b><span>Ogni sottocriterio riceve un voto da 1 a 5, in base al mansionario</span></div>
+        <i>→</i>
+        <div><b>2</b><span>Si fa la media dei voti</span></div>
+        <i>→</i>
+        <div><b>3</b><span>La media si riporta su scala 100</span></div>
+      </div>
+    </div>
+    ${CRITERIA.map((c,i)=>`<div class="card crit-card">
+      <div class="crit-h"><div style="min-width:0"><h2 style="margin-top:4px">${c.nm}</h2><p class="muted" style="margin-top:4px">${c.q}</p></div>
+        </div>
+      ${c.keys.map(sub).join("")}
+      <div class="crit-strip"><div class="crit-sc"><b>${fmt(p.crit[c.pk],1)}</b><span>punteggio su scala 100</span></div></div>
+    </div>`).join("")}
+    <div class="sumrow">
+      <div style="min-width:0"><div class="nm">Media dei tre criteri</div><div class="muted small mono">(${fmt(p.crit.imp,1)} + ${fmt(p.crit.req,1)} + ${fmt(p.crit.aut,1)}) ÷ 3</div></div>
+      <b>${fmt((p.crit.imp+p.crit.req+p.crit.aut)/3)}</b>
+    </div>
+    <div class="sumrow strong">
+      <div style="min-width:0"><div class="nm">Media con il competence score = punteggio di posizione</div><div class="small mono" style="opacity:.85">(${fmt(p.crit.comp,1)} competenze + ${fmt(p.crit.imp,1)} + ${fmt(p.crit.req,1)} + ${fmt(p.crit.aut,1)}) ÷ 4</div></div>
+      <b>${fmt(p.score)}</b>
+    </div>
+    <div class="card row" style="justify-content:space-between">
+      <div style="min-width:0;flex:1 1 320px"><h3 style="margin-bottom:4px">Come si usano questi voti</h3><p class="muted small">Insieme alle competenze, questi tre criteri formano il punteggio di posizione, che determina la tua fascia.</p></div>
+      <button type="button" class="btn solid" data-go="punteggio">Vai al Posizionamento →</button>
+    </div>
+  </div>`;
+}
+
+function secPunteggio(){
+  const p=MEPOS, v=ME.votes;
+  const BAND_SHORT={"1": "Ruoli che svolgono attività già definite con competenze di base. Il risultato del lavoro viene verificato da altri.", "2": "Ruoli che svolgono da soli attività ricorrenti e ne rispondono, seguendo procedure già stabilite.", "3": "Ruoli con una competenza tecnica riconoscibile, che lavorano su casi definiti seguendo le indicazioni ricevute.", "4": "Ruoli che padroneggiano il proprio ambito, anche nelle situazioni non previste, con autonomia operativa.", "5": "Ruoli che presidiano un'attività, un processo o le sue risorse, con competenze esperte e autonomia entro direttive generali.", "6": "Ruoli che guidano una struttura e rispondono dei suoi risultati, con responsabilità su persone e mezzi.", "7": "Ruoli di direzione con deleghe formali, che rispondono di una o più strutture e contribuiscono agli indirizzi dell'azienda."};
+  const ladder=[...BANDS].reverse().map(b=>`<details class="rungd ${b.n===p.band.n?'me':''}"><summary class="rung">
+      <span class="num">${b.n}</span><div style="min-width:0"><div class="nm">${b.name}</div></div>
+      <span class="rg">${b.n===7?'da 80':fmt(b.from,1)+' – '+b.to}</span><span class="chev" aria-hidden="true">＋</span></summary>
+      <p class="rung-sum">${BAND_SHORT[b.n]}${b.n===p.band.n?' <b>È la tua fascia.</b>':''}</p></details>`).join("");
+  const team=PATH.map(k=>{const r=ROLES[k],q=position(r);return `<div class="r ${k===EMP.role?'me':''}">
+      <div style="min-width:0"><div class="nm">${r.name}</div>${k===EMP.role?'<div class="muted small">Il tuo ruolo</div>':''}</div>
+      <span class="sc">${fmt(q.score)} punti</span><span class="pill ${k===EMP.role?'blue':'eq'}">Fascia ${q.band.n}</span></div>`}).join("");
+  return `
+  ${head("Posizionamento","Il posizionamento","")}
+  <div class="stack">
+    <div class="info" style="font-size:.95rem;line-height:1.6">Il punteggio di posizione (competenze, impatto organizzativo, carico cognitivo-relazionale e autonomia decisionale) colloca il tuo ruolo in un sistema di fasce retributive.</div>
+
+    <h2 style="margin-top:-20px">La tua fascia</h2>
+    <div class="card pos-hero" style="border-top:4px solid var(--brand);margin-bottom:50px">
+      <div>
+        <div class="eyebrow" style="margin-bottom:12px">${ME.name}</div>
+        <div class="pos-band"><span class="n">${p.band.n}</span>
+          <div style="min-width:0"><div class="muted small">Fascia ${p.band.n} su 7</div><div class="nm">${p.band.name}</div><div class="muted small">Punteggio da ${fmt(p.band.from,1)} a ${p.band.to}</div></div></div>
+      </div>
+      <div>
+        <div class="big-score"><span class="v" style="font-size:2.6rem">${fmt(p.score)}</span><span class="muted">punteggio di posizione, su 100</span></div>
+        ${trackHTML(p.score)}
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Le 7 fasce</h3>
+      <div class="ladder">${ladder}</div>
+      <details class="lvscale" style="margin-top:14px">
+        <summary><span>Cosa cambia salendo di fascia?</span><span class="chev">＋</span></summary>
+      <div class="rise" style="margin-top:10px">
+        <div class="rise-bars"><div style="height:18px;background:#D3E3F3"><span>1</span></div><div style="height:30px;background:#AFCBE8"><span>2</span></div><div style="height:42px;background:#86AFDA"><span>3</span></div><div style="height:54px;background:#5B92CB"><span>4</span></div><div style="height:66px;background:#3277BA"><span>5</span></div><div style="height:78px;background:#0060A6"><span>6</span></div><div style="height:90px;background:#00427A"><span>7</span></div></div>
+        <p class="rise-cap"><b>Più si sale di fascia, più crescono</b> competenze, impatto organizzativo, carico cognitivo-relazionale e autonomia decisionale.</p>
+      </div>
+      </details>
+      <details class="bandinfo">
+        <summary><span>Cosa significa la fascia ${p.band.n} · ${p.band.name}?</span><span class="chev">＋</span></summary>
+        <div class="bi-body">
+          <p class="bi-def">Svolgi <b>in autonomia</b> attività ricorrenti, seguendo procedure già stabilite, e rispondi di ciò che ti viene affidato (non di persone o budget).</p>
+          <p class="small muted" style="margin-top:10px">La fascia descrive la posizione, non la persona.</p>
+        </div>
+      </details>
+    </div>
+    <div class="card">
+      <h3>Le regole delle fasce</h3>
+      <div class="rules">
+        <div class="rule"><b>I confini sono fissi</b><p>Sono stati decisi prima di valutare i ruoli e non si spostano.</p></div>
+        <div class="rule"><b>Ogni fascia vale 10 punti</b><p>Fasce da 5 punti sarebbero troppo strette: basterebbe un voto in più per cambiare fascia. Fasce da 20 metterebbero insieme ruoli troppo diversi. 10 punti è il giusto equilibrio.</p></div>
+        <div class="rule"><b>Due eccezioni: la prima e l'ultima</b><p>La fascia 1 parte da 17,5, il punteggio minimo possibile. La fascia 7 comprende tutti i ruoli da 80 in su: al suo interno i dirigenti si distinguono in tre Band (C, B, A).</p></div>
+      </div>
+    </div>
+    <details class="lvscale" style="margin-top:-30px">
+      <summary><span>La fascia 7: la dirigenza</span><span class="chev">＋</span></summary>
+      <div style="padding:14px 4px 4px">
+      <div class="note" style="margin:0 0 12px"><b>Accesso alla dirigenza.</b> La fascia 7 non si raggiunge con il solo punteggio: serve la procedura di nomina GH.ITA.HR.PCD.01 (requisiti minimi, candidatura, assessment e approvazione).</div>
+      <div>
+          <p style="margin:0 0 12px;line-height:1.6">Dentro la fascia 7 i dirigenti si distinguono con un secondo punteggio, il <b>punteggio dirigenziale</b> (da 4 a 12). Si basa su <b>quattro criteri aggiuntivi</b>:</p>
+          <div class="crit4"><div>Struttura guidata</div><div>A chi si riporta</div><div>Ampiezza del perimetro</div><div>Orizzonte delle decisioni</div></div>
+          <div class="bands3">
+            <div><b>Band C</b><span class="mono">4 – 6</span><small>Line Manager · ingresso</small></div>
+            <div><b>Band B</b><span class="mono">7 – 9</span><small>Executive Manager</small></div>
+            <div><b>Band A</b><span class="mono">10 – 12</span><small>Strategic Manager</small></div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <div class="stack">
+      <div class="card row" style="justify-content:space-between;gap:12px">
+        <div style="min-width:0;flex:1 1 320px"><h3 style="margin-bottom:4px">Come si sale di fascia?</h3><p class="muted small">Scopri cosa serve per passare al ruolo e alla fascia successivi.</p></div>
+        <button type="button" class="btn solid" data-go="carriera">Vai a Crescita e carriera →</button>
+      </div>
+    </div>
+
+  </div>`;
+}
+
+function secValutazione(){
+  return `${head("Valutazione","La tua valutazione 2026","Confronto tra il livello atteso dal ruolo e il livello che hai raggiunto.")}
+  ${evalComp()}`;
+}
+
+function evalComp(){
+  const C=ME.comps, A=EMP.achieved;
+  const exp=compScore(C), ach=compScore(C,A);
+  const inline=C.filter((c,i)=>A[i]>=c.l).length;
+  const chart=radar(C.map(c=>c.short),[
+    {values:A, stroke:"var(--blue)", fill:"color-mix(in srgb, var(--blue) 18%, transparent)", dots:true, dotColor:(i,v)=> v<C[i].l?"var(--red)": v>C[i].l?"var(--green)":"var(--blue)"},
+    {values:C.map(c=>c.l), stroke:"var(--muted)", dash:"6 5", w:2, dots:true, hollow:true, r:4.5}
+  ],{aria:"Livello atteso e livello raggiunto per le 5 competenze"});
+  const tbl=C.map((c,i)=>{const g=A[i]-c.l;return `<tr>
+      <td>${c.s}</td>
+      <td class="c mono">${c.l}</td><td class="c mono">${EMP.self[i]}</td><td class="c mono"><b>${A[i]}</b></td>
+      <td class="c"><span class="gapcell ${g<0?'bad':g>0?'plus':''}">${g<0?Math.abs(g):g>0?'+'+g:'–'}</span></td></tr>`}).join("");
+  const calc=C.map((c,i)=>{const g=A[i]-c.l;return `<tr>
+      <td>${c.s}<span class="sub">${c.m}</span></td><td class="n">${c.c}%</td><td class="n">${c.k} · ${c.k===2?'core':'supp.'}</td>
+      <td class="n">${c.l}</td><td class="n">${A[i]}</td><td class="n ${g<0?'neg':g>0?'pos':'zero'}">${g>0?'+'+g:g}</td>
+      <td class="n">${c.c*c.l*c.k}</td><td class="n">${c.c*A[i]*c.k}</td></tr>`}).join("");
+  return `<div class="stack">
+    <div class="stack">
+      <div class="card radar-wrap radar-sm">
+        <h3>Livello atteso e livello raggiunto</h3>
+        ${chart}
+        <div class="legend"><span><i class="lg-dash"></i>Livello atteso dal ruolo</span><span><i class="lg-area"></i>Livello raggiunto</span></div>
+        <div class="legend" style="margin-top:4px"><span><i style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block"></i>Rosso: sotto l'atteso</span><span><i style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block"></i>Verde: sopra l'atteso</span></div>
+      </div>
+      <div class="stack">
+        <div class="card grid g3" style="gap:12px">
+          <div class="kpi"><span class="v">${exp}</span><span class="l">Punteggio atteso dal ruolo</span></div>
+          <div class="kpi"><span class="v">${ach}</span><span class="l">Punteggio raggiunto</span></div>
+          <div class="kpi"><span class="v">${Math.round(ach/exp*100)}%</span><span class="l">Copertura del ruolo · ${inline} su 5 in linea o sopra</span></div>
+        </div>
+        <div class="card">
+          <h3>Come leggere il risultato</h3>
+          ${C.map((c,i)=>({c,i})).sort((x,y)=>((A[x.i]>x.c.l)-(A[y.i]>y.c.l))||(x.i-y.i)).map(({c,i})=>`<div class="read-item"><div><p style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0"><b>${c.s.replace(/ \(.*\)/,"")}</b>${(g=>`<span class="stx ${g<0?"neg":g>0?"pos":""}">${g<0?"Sotto il livello atteso":g>0?"Sopra il livello atteso":"In linea"}</span>`)(A[i]-c.l)}${A[i]<c.l?`<button type="button" class="btn" style="padding:4px 12px;font-size:.8rem" data-go="formazione">Vedi i percorsi suggeriti →</button>`:""}</p>${A[i]<c.l?`<p class="small" style="margin:6px 0 0;max-width:80ch">${({"Stima e Analisi dei Costi di Progetto":"I computi metrici richiedono ancora molte correzioni e le discrepanze di costo non vengono individuate in autonomia. È la competenza che pesa di più nel ruolo: va rafforzata con affiancamento e formazione tecnica."})[c.s]||""}</p>`:""}</div></div>`).join("")}
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Competenze specifiche del ruolo</h3>
+      <p class="muted small" style="margin-bottom:10px">Le tue competenze, con l'autovalutazione e la valutazione del responsabile confrontate con il valore atteso. Lo skill gap compare quando la valutazione è sotto l'atteso.</p>
+      <div class="tbl-wrap"><table class="boldtbl">
+        <thead><tr><th>Competenza</th><th class="c">Valore atteso</th><th class="c">Autovalutazione</th><th class="c">Valutazione responsabile</th><th class="c">Skill gap</th></tr></thead>
+        <tbody>${tbl}</tbody></table></div>
+      <button type="button" class="btn solid" style="margin-top:14px" data-go="formazione">Vedi la formazione suggerita →</button>
+    </div>
+    <div class="stack">
+      <div class="card"><h3>Commento del responsabile</h3><p class="quote">${EMP.managerComment}<span class="by">Responsabile diretto · colloquio di valutazione 2026</span></p></div>
+    </div>
+  </div>`;
+}
+
+function evalPerf(){
+  const tot=GOALS.reduce((s,g)=>s+g.peso*g.pct/100,0);
+  const done=GOALS.filter(g=>g.pct>=100).length;
+  return `<div class="stack">
+    <div class="grid g3">
+      <div class="card kpi"><span class="v">${fmt(tot,0)}%</span><span class="l">Raggiungimento complessivo (media pesata)</span></div>
+      <div class="card kpi"><span class="v">${done} su ${GOALS.length}</span><span class="l">Obiettivi raggiunti pienamente</span></div>
+      <div class="card kpi"><span class="v">2026</span><span class="l">Ciclo di performance · chiuso</span></div>
+    </div>
+    <div class="card">
+      <h3>Il ciclo dell'anno</h3>
+      <div class="timeline">
+        <div class="done"><b>Assegnazione</b><span class="muted">Gennaio · obiettivi concordati con il responsabile</span></div>
+        <div class="done"><b>Verifica intermedia</b><span class="muted">Luglio · check-in e riallineamento</span></div>
+        <div class="done"><b>Valutazione finale</b><span class="muted">Settembre · risultati e colloquio</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Obiettivi stabiliti e raggiunti</h3>
+      ${GOALS.map(g=>`<div class="goal">
+        <div style="min-width:0"><div class="t">${g.t}</div>
+          <div class="meta"><span>Indicatore: ${g.kpi}</span><span>Peso <b>${g.peso}%</b></span><span>Target <b>${g.target}</b></span><span>Risultato <b>${g.res}</b></span></div></div>
+        <div class="res">${g.pct>=100?'<span class="pill ok">Raggiunto</span>':'<span class="pill warn">Parziale · '+g.pct+'%</span>'}
+          <div class="meter"><i class="${g.pct<100?'part':''}" style="width:${g.pct}%"></i></div></div>
+      </div>`).join("")}
+    </div>
+  </div>`;
+}
+
+function courseRow(c){
+  const on=state.plan.has(c.id);
+  return `<div class="course"><div style="min-width:0"><div class="t">${c.t}</div><div class="m"><span>${c.f}</span><span>${c.d}</span></div></div>
+    <button type="button" class="btn ${on?'on':''}" data-plan="${c.id}" aria-pressed="${on}">${on?'Nel mio piano ✓':'Aggiungi al piano'}</button></div>`;
+}
+const allCourses=()=>Object.values(CATALOG).flat();
+
+function simulatePlan(){
+  const C=ME.comps, A=EMP.achieved;
+  const after=A.slice();
+  C.forEach((c,i)=>{
+    (CATALOG[c.m]||[]).forEach(k=>{ if(state.plan.has(k.id)){ const m=/livello (\d)/.exec(k.lv); if(m) after[i]=Math.max(after[i],+m[1]); } });
+  });
+  return after;
+}
+function simHTML(){
+  const C=ME.comps, A=EMP.achieved, after=simulatePlan();
+  if(!state.plan.size) return `<p class="plan-empty">Aggiungi un percorso al piano per vedere come potrebbe cambiare il tuo livello.</p>`;
+  const touched=C.map((c,i)=>({c,i})).filter(x=>(CATALOG[x.c.m]||[]).some(k=>state.plan.has(k.id)));
+  return touched.map(x=>{const n=A[x.i], f=after[x.i], l=x.c.l;
+    const msg= f===n ? 'Il livello resta lo stesso, ma diventa più solido.' : f<l ? `Ti manca ancora ${l-f} livello per arrivare all'atteso (${l}).` : f===l ? 'Raggiungi il livello atteso dal ruolo.' : `Superi il livello atteso dal ruolo (${l}).`;
+    return `<div class="simrow"><div class="nm">${x.c.s.replace(/ \(.*\)/,"")}</div>
+      <div class="simlv"><span class="muted">Livello</span><b class="mono" style="font-size:1.3rem">${n}</b><span class="arrow">→</span><b class="mono" style="font-size:1.3rem;color:var(--green)">${f}</b></div>
+      <div class="small">${msg}</div></div>`;}).join("")
+    + `<p class="small muted" style="margin-top:10px">Stima indicativa: il livello viene confermato nella prossima valutazione.</p>`;
+}
+
+function simRadar(){
+  const C=ME.comps, A=EMP.achieved, after=simulatePlan(), has=state.plan.size>0;
+  const series=[
+    {values:C.map(c=>c.l), stroke:"var(--muted)", dash:"6 5", w:2},
+    {values:A, stroke:"var(--brand)", fill:"color-mix(in srgb, var(--brand) 14%, transparent)", w:2, dots:true, r:4}
+  ];
+  if(has) series.push({values:after, stroke:"var(--navy)", w:2.5, dots:true, r:5});
+  return `<div class="radar-wrap sim-radar">${radar(C.map(c=>c.short),series,{aria:"Spider chart: livello atteso, livello di oggi e livello dopo i percorsi"})}
+      <div class="legend"><span><i class="lg-dash"></i>Atteso dal ruolo</span><span><i class="lg-area"></i>Oggi</span>${has?'<span><i style="width:24px;border-top:3px solid var(--navy);display:inline-block"></i>Dopo i percorsi</span>':''}</div></div>`;
+}
+
+function secFormazione(){
+  const C=ME.comps, A=EMP.achieved;
+  const below=C.map((c,i)=>({c,i,g:A[i]-c.l})).filter(x=>x.g<0);
+  const rest=C.map((c,i)=>({c,i,g:A[i]-c.l})).filter(x=>x.g>=0);
+  const planList=[...state.plan].map(id=>allCourses().find(c=>c.id===id)).filter(Boolean);
+  return `
+  ${head("Formazione","Percorsi formativi suggeriti per te","Per ogni competenza sotto il livello atteso ti proponiamo dei percorsi da aggiungere al tuo piano.")}
+  <div class="stack">
+    <div>
+      <div class="stack">
+        ${below.map(x=>`<div class="gapcard below">
+          <div class="gh"><div style="min-width:0"><div class="nm">${x.c.s}</div><div class="small muted">Competenza ${x.c.k===2?'core':'di supporto'} · centralità ${x.c.c}%</div></div>
+            <div class="levels"><span>Raggiunto <b>${A[x.i]}</b></span><span class="arrow">→</span><span>Atteso <b>${x.c.l}</b></span><span class="pill bad">${x.g}</span></div></div>
+          ${(CATALOG[x.c.m]||[]).map(courseRow).join("")}
+        </div>`).join("")}
+      </div>
+    </div>
+    <div class="card" style="margin-top:-20px">
+      <h3>Come cambierebbero le tue competenze</h3>
+      <div class="simgrid">
+        <div>${simHTML()}</div>
+        ${simRadar()}
+      </div>
+    </div>
+    <div class="card cons">
+      <h3>Per consolidare le altre competenze</h3>
+      ${rest.map(x=>`<details class="cons-row"><summary><span class="nm">${x.c.s.replace(/ \(.*\)/,"")}</span><span class="chev">＋</span></summary>
+        <div class="cons-body">${(CATALOG[x.c.m]||[]).map(courseRow).join("")}</div></details>`).join("")}
+    </div>
+    <div class="card">
+      <div class="badge-ob"><div class="hex" aria-hidden="true">BADGE</div><div><h3 style="margin-bottom:4px">Open Badge</h3><p class="small muted">Al termine di ogni percorso ricevi un badge digitale che certifica la competenza acquisita. Il badge resta nel tuo profilo e si può condividere.</p></div></div>
+    </div>
+    <div class="card row" style="justify-content:space-between;gap:12px;margin-top:-36px">
+      <div style="min-width:0;flex:1 1 320px"><p style="margin:0"><b>Come puoi avanzare nel tuo percorso?</b></p></div>
+      <button type="button" class="btn solid" data-go="carriera">Vai a Crescita e carriera →</button>
+    </div>
+  </div>`;
+}
+
+function secCarriera(){
+  const cur=ME, A=EMP.achieved;
+  const ci=PATH.indexOf(EMP.role), nextKey=PATH[ci+1], nx=ROLES[nextKey];
+  const P=PATH.map(k=>({k,r:ROLES[k],p:position(ROLES[k])}));
+  const rowsDef=[["Competenze","comp"],["Impatto organizzativo","imp"],["Carico cognitivo-relazionale","req"],["Autonomia decisionale","aut"]];
+  const thead=P.map((x,j)=>`<th class="c ${x.k===EMP.role?'me':''}">${x.k===EMP.role?'<span class="here">Sei qui</span>':''}${x.r.name}<span class="fasc">Fascia ${x.p.band.n}</span></th>`).join("");
+  const rows=rowsDef.map(([nm,k])=>`<tr><td>${nm}</td>${P.map(x=>`<td class="c ${x.k===EMP.role?'me':''}">${fmt(x.p.crit[k],1)}</td>`).join("")}</tr>`).join("");
+  const score=`<tr class="tot"><td>Punteggio di posizione</td>${P.map((x,j)=>`<td class="c ${x.k===EMP.role?'me':''}"><b>${fmt(x.p.score)}</b>${j>0?`<span class="delta">+${fmt(x.p.score-P[j-1].p.score)}</span>`:''}</td>`).join("")}</tr>`;
+  const band=`<tr><td>Fascia</td>${P.map(x=>`<td class="c ${x.k===EMP.role?'me':''}"><span class="fb f${x.p.band.n}">Fascia ${x.p.band.n}</span></td>`).join("")}</tr>`;
+  /* cosa serve per il passo successivo (livelli di Mario) */
+  const need=nx.comps.map(tc=>{const i=cur.comps.findIndex(c=>c.m===tc.m);const have=i>=0?A[i]:null;return {tc,have}}).filter(x=>x.have===null||x.have<x.tc.l);
+  return `
+  ${head("Crescita e carriera","Come si passa da una fascia all'altra","La fascia è legata al ruolo: si sale di fascia passando a un ruolo che richiede di più.")}
+  <div class="stack">
+    <div class="card">
+      <h3>Il percorso nel team Estimating</h3>
+      <div class="tbl-wrap"><table class="boldtbl cgt career">
+        <thead><tr><th>Criterio</th>${thead}</tr></thead>
+        <tbody>${rows}${score}</tbody>
+      </table></div>
+    </div>
+    <div class="card next">
+      <div style="min-width:0;flex:1 1 380px">
+        <h3 style="margin-bottom:6px">Il tuo prossimo passo: ${nx.name}</h3>
+        <p class="small" style="margin:0 0 8px">Competenze da sviluppare:</p>
+        <div class="chips">${need.map(x=>`<span class="chip">${x.tc.s.replace(/ \(.*\)/,"")} <b>${x.have===null?'nuova':x.have} → ${x.tc.l}</b></span>`).join("")}</div>
+      </div>
+      <button type="button" class="btn solid" data-go="formazione">Vedi la formazione →</button>
+    </div>
+  </div>`;
+}
+
+/* Perimetro pilota: Corporate Operations Italy (documento unico, tab. 23) */
+const ORG=[
+  {area:"Railway Slab Track", head:"Head of Railway Slab Track", roles:[]},
+  {area:"Area tecnica", head:"Technical Director", roles:[{r:"Technical Office Manager",n:3},{r:"Electrical Manager",kids:["Electrical Engineer"]},{r:"Precast Manager",kids:["Precast Support"]}]},
+  {area:"Contract & Claim", head:"Contract & Claim Manager", roles:[]},
+  {area:"Tender", head:"Tender Director Italy", roles:["Technical Secretary","Tender Specialist"]},
+  {area:"Project Optimization", head:"Project Optimization Manager", roles:[]},
+  {area:"Estimating", head:"Estimating Manager Italy", roles:["Senior Estimator","Estimator","Junior Estimator"]}
+];
+const ORGSC={ /* competenze, impatto, carico, autonomia, punteggio */
+  "Technical Director":[78,93.3,100,100,92.83],"Head of Railway Slab Track":[78,93.3,100,100,92.83],"Estimating Manager Italy":[74.5,93.3,100,100,91.96],
+  "Tender Director Italy":[68,86.7,100,100,88.67],"Precast Manager":[64.5,80,100,100,86.13],"Project Optimization Manager":[63,80,100,100,85.75],
+  "Electrical Manager":[70,73.3,90,100,83.33],"Contract & Claim Manager":[53,73.3,90,80,74.08],"Technical Office Manager":[48,60,80,60,62.00],
+  "Senior Estimator":[50,66.7,70,60,61.67],"Estimator":[41.5,46.7,50,40,44.54],"Tender Specialist":[44,40,50,40,43.50],
+  "Precast Support":[45,33.3,50,40,42.08],"Electrical Engineer":[43.5,26.7,50,40,40.04],"Technical Secretary":[33,33.3,50,40,39.08],"Junior Estimator":[29.5,33.3,40,40,35.71]
+};
+function secDirezione(){
+  const me=ME.name, all=Object.keys(ORGSC).sort((a,b)=>ORGSC[b][4]-ORGSC[a][4]);
+  const node=(r,lead,n)=>{const v=ORGSC[r][4],b=bandOf(v);return `<div class="onode ${r===me?'me':''} ${lead?'lead':''}">
+      <div class="on-nm">${r}${n?` <span class="muted small" style="font-weight:400">· ${n} posizioni</span>`:''}${r===me?' <span class="pill blue">Il tuo ruolo</span>':''}</div>
+      <div class="on-sc"><span class="fb f${b.n}">Fascia ${b.n}</span><span class="mono small">${fmt(v)}</span></div></div>`};
+  const tn=(r,n)=>{const v=ORGSC[r][4],b=bandOf(v);return `<div class="tnode f${b.n} ${r===me?'me':''}">${r===me?'<span class="t-you">Tu</span>':''}<b>${r}</b>${n?`<span class="t-n">${n} posizioni</span>`:''}<span class="t-f">Fascia ${b.n} · ${fmt(v,1)}</span></div>`};
+  const areas=ORG.map(a=>`<div class="tcol">
+      ${tn(a.head)}
+      ${a.roles.length?`<div class="tkids">${a.roles.map(x=>{const o=typeof x==="string"?{r:x}:x;return `<div class="tk">${tn(o.r,o.n)}${o.kids?`<div class="tkids">${o.kids.map(k=>`<div class="tk">${tn(k)}</div>`).join("")}</div>`:""}</div>`}).join("")}</div>`:""}
+    </div>`).join("");
+  const legend=[...BANDS].map(b=>`<span><i class="tsw f${b.n}"></i>${b.n}</span>`).join("");
+  const dist=[...BANDS].reverse().map(b=>{const rs=all.filter(r=>bandOf(ORGSC[r][4]).n===b.n);return `<tr class="${rs.includes(me)?'mine':''}">
+      <td><span class="fb f${b.n}">Fascia ${b.n}</span> <span class="small" style="font-weight:400;margin-left:6px">${b.name}</span></td>
+      <td class="c">${rs.length}</td>
+      <td style="font-weight:400">${rs.length?`<div class="rchips">${rs.map(r=>`<span class="${r===me?'me':''}">${r}</span>`).join("")}</div>`:'<span class="muted small">Nessun ruolo</span>'}</td></tr>`}).join("");
+  return `
+  ${head("La tua area Corporate","Corporate Operations Italy: tutti i ruoli","Tutti i ruoli della tua area, valutati con gli stessi criteri.")}
+  <div class="stack">
+    <div class="grid g4 kpi-sm">
+      <div class="card kpi"><span class="v">16</span><span class="l">Ruoli valutati</span></div>
+      <div class="card kpi"><span class="v">1</span><span class="l">Dizionario delle competenze</span></div>
+      <div class="card kpi"><span class="v">4</span><span class="l">Criteri di posizionamento</span></div>
+      <div class="card kpi"><span class="v">7</span><span class="l">Fasce</span></div>
+    </div>
+
+
+    <div class="card">
+      <h3>Come si distribuiscono i ruoli nelle fasce</h3>
+      <div class="tbl-wrap"><table class="boldtbl cgt dtbl"><thead><tr><th>Fascia</th><th class="c">Ruoli</th><th>Quali</th></tr></thead><tbody>${dist}</tbody></table></div>
+      <details class="lvscale" style="margin-top:12px"><summary><span>Vedi il dettaglio dei 16 ruoli, criterio per criterio</span><span class="chev">＋</span></summary>
+        <div class="tbl-wrap"><table class="boldtbl cgt">
+          <thead><tr><th>Ruolo</th><th class="c">Competenze</th><th class="c">Impatto organizzativo</th><th class="c">Carico cognitivo-relazionale</th><th class="c">Autonomia decisionale</th><th class="c">Punteggio</th><th class="c">Fascia</th></tr></thead>
+          <tbody>${all.map(r=>{const x=ORGSC[r];return `<tr class="${r===me?'mine':''}"><td>${r}</td>${x.slice(0,4).map(v=>`<td class="c">${fmt(v,1)}</td>`).join("")}<td class="c"><b>${fmt(x[4])}</b></td><td class="c"><span class="fb f${bandOf(x[4]).n}">${bandOf(x[4]).n}</span></td></tr>`}).join("")}</tbody>
+        </table></div>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="hsteps">
+        <div class="hs"><span class="dn">1</span><div><b>Le fasce e il CCNL vanno nella stessa direzione</b><p>Confrontandole con gli inquadramenti attuali, le due letture sono risultate allineate.</p><button type="button" class="btn solid" style="margin-top:10px" data-go="contratto">Vai a Contratto e CCNL →</button></div></div>
+      </div>
+    </div>
+
+  </div>`;
+}
+
+function secContratto(){
+  return `
+  ${head("Contratto e CCNL","Il tuo contratto e il CCNL di riferimento","Il sistema di fasce si affianca al contratto collettivo e non lo sostituisce. Minimi retributivi, orario, ferie e diritti restano quelli del CCNL.")}
+  <div class="stack">
+    <div class="grid g2">
+      <div class="card doc-sm">
+        <div class="doc"><div class="ic">PDF</div><div style="min-width:0;flex:1">
+          <h3 style="margin-bottom:6px">Il mio contratto individuale</h3>
+          <dl class="kv" style="margin-bottom:14px"><dt>Tipo</dt><dd>${EMP.contract}</dd><dt>Intestatario</dt><dd>${EMP.name}</dd><dt>Mansione</dt><dd>${ME.name}</dd><dt>Data assunzione</dt><dd>${EMP.since}</dd></dl>
+          <button type="button" class="btn" data-toast="Nel portale reale qui si apre il contratto firmato dall'area documenti personale.">Consulta il contratto</button>
+        </div></div>
+      </div>
+      <div class="card doc-sm">
+        <div class="doc"><div class="ic">CCNL</div><div style="min-width:0;flex:1">
+          <h3 style="margin-bottom:6px">CCNL Edilizia – Industria</h3>
+          <dl class="kv" style="margin-bottom:14px"><dt>Settore</dt><dd>Industria edilizia e affini</dd><dt>Codice CNEL</dt><dd class="mono">F012</dd><dt>Ultimo rinnovo</dt><dd>21 febbraio 2025</dd></dl>
+          <button type="button" class="btn">Consulta il CCNL →</button>
+        </div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Perché le fasce, se c'è già il CCNL?</h3>
+      <p class="muted" style="margin-bottom:14px;max-width:75ch">Il CCNL e le fasce rispondono a due domande diverse.</p>
+      <div class="cmp2">
+        <div class="cmp-col">
+          <div class="cmp-h">Il CCNL</div>
+          <ul>
+            <li>Colloca ogni lavoratore in un livello di inquadramento.</li>
+            <li>Garantisce a ogni lavoratore un trattamento minimo e i diritti.</li>
+            <li>Non è stato pensato per misurare il valore delle singole posizioni all'interno di un'azienda: lo stesso livello raggruppa ruoli anche molto diversi.</li>
+          </ul>
+        </div>
+        <div class="cmp-col on">
+          <div class="cmp-h">Le fasce</div>
+          <ul>
+            <li>Misurano il valore di ogni posizione, con criteri oggettivi in linea con la Direttiva europea sulla trasparenza retributiva.</li>
+            
+          </ul>
+        </div>
+      </div>
+      <div class="cmp-key">Le fasce non sostituiscono il CCNL: lo completano.</div>
+    </div>
+    <div class="card">
+      <h3>Cosa non valuta la fascia</h3>
+      <div class="hsteps" style="margin-top:12px">
+        <div class="hs"><span class="dn">1</span><div><b>La persona</b><p>Chi ricopre la posizione.</p></div></div>
+        <div class="hs"><span class="dn">2</span><div><b>La performance</b><p>Misura come una persona svolge il proprio ruolo in un determinato periodo, rispetto a obiettivi che cambiano nel tempo.</p></div></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:-36px">
+      <h3>Cosa ti offre</h3>
+      <div class="hsteps" style="margin-top:12px">
+        <div class="hs"><span class="dn">1</span><div><b>Una risposta chiara</b><p>Alla domanda "perché guadagno questa cifra?".</p></div></div>
+        <div class="hs"><span class="dn">2</span><div><b>Scelte motivate</b><p>L'azienda motiva le proprie scelte retributive con criteri solidi e conformi alla normativa europea.</p></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Hai domande?</h3>
+      <p class="muted">Per chiarimenti sul tuo inquadramento, sul punteggio o sulla fascia puoi chiedere un incontro con il dipartimento People. Il diritto all'informazione sui criteri retributivi è previsto dalla Direttiva UE 2023/970 sulla trasparenza retributiva.</p>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   RENDER E INTERAZIONI
+   ============================================================ */
+const VIEWS={profilo:secProfilo,mansioni:secMansioni,competenze:secCompetenze,ruolo:secRuolo,punteggio:secPunteggio,valutazione:secValutazione,formazione:secFormazione,carriera:secCarriera,direzione:secDirezione,contratto:secContratto};
+function render(scroll){
+  renderNav();
+  document.getElementById("main").innerHTML=VIEWS[state.sec]();
+  if(scroll){ window.scrollTo({top:0,behavior:"instant"in window?"instant":"auto"}); }
+}
+function go(id){
+  if(!VIEWS[id]) return;
+  state.sec=id; render(true);
+  try{ history.replaceState(null,"","#"+id); }catch(e){}
+  try{ localStorage.setItem("fg-sec",id);}catch(e){}
+}
+function toast(msg){
+  const t=document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t);
+  setTimeout(()=>t.remove(),3200);
+}
+document.addEventListener("click",e=>{
+  const g=e.target.closest("[data-go]"); if(g){ go(g.dataset.go); return; }
+  const tb=e.target.closest("[data-tab]"); if(tb){ state.evalTab=tb.dataset.tab; render(false); return; }
+  const tg=e.target.closest("[data-target]"); if(tg && !tg.disabled){ state.target=tg.dataset.target; render(false); return; }
+  const pl=e.target.closest("[data-plan]"); if(pl){ const id=pl.dataset.plan;
+    if(state.plan.has(id)){state.plan.delete(id);} else {state.plan.add(id); toast("Percorso aggiunto al tuo piano formativo");}
+    savePlan(); render(false); return; }
+  const ts=e.target.closest("[data-toast]"); if(ts){ toast(ts.dataset.toast); }
+});
+function showLogin(on){
+  document.getElementById("login").hidden=!on;
+  document.getElementById("shell").hidden=on;
+  document.getElementById("who").hidden=on;
+}
+document.getElementById("loginForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  state.sec="profilo"; showLogin(false); render(true);
+});
+document.addEventListener("click",e=>{ if(e.target.closest("[data-logout]")){ showLogin(true); window.scrollTo(0,0); } });
+(function init(){
+  const h=(location.hash||"").replace("#","");
+  if(VIEWS[h]) state.sec=h;
+  render(false);
+  showLogin(true);
+})();
+</script>
+
+</body></html>
